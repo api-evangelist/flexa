@@ -1,0 +1,34 @@
+generated: '2026-07-19'
+method: searched
+source: openapi/flexa-openapi.json
+docs: https://docs.flexa.co/api-reference/introduction
+summary:
+  types:
+  - http
+  http_schemes:
+  - basic
+  api_key_delivery: HTTP Basic Authentication (API key as the username; no password required)
+schemes:
+- name: BasicAuth
+  type: http
+  scheme: basic
+  description: >-
+    All requests to the Flexa API are authenticated with API keys using HTTP
+    Basic Authentication. Include your API key as the "username" value in the
+    Authorization header; a password is not required.
+  sources:
+  - openapi/flexa-openapi.json
+key_prefixes:
+- prefix: publishable_test_
+  mode: test
+  visibility: publishable
+- prefix: secret_test_
+  mode: test
+  visibility: secret
+- prefix: secret_live_
+  mode: live
+  visibility: secret
+notes:
+- Test API keys (publishable_test_ / secret_test_) operate against test-mode assets including testnet assets and Flexa Credit (CR).
+- Live API keys (secret_live_) only become functional once the business is approved to process payments.
+- API keys are provisioned by Flexa's Partnerships team after signup; rotation is handled via Flexa Support (support@flexa.co).
