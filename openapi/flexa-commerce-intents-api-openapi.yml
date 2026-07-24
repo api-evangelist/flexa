@@ -1,0 +1,469 @@
+openapi: 3.1.1
+info:
+  title: Flexa Assets Commerce Intents API
+  description: 'The Flexa API offers access to Flexa’s powerful, instant, and completely fraud-resistant platform for accepting digital asset payments from your customers.
+
+
+    # Authentication
+
+
+    All requests to the Flexa API are authenticated with API keys, which are accepted using [HTTP Basic Authentication](https://en.wikipedia.org/wiki/Basic_access_authentication). To connect, simply include your API key as the “username” value when providing the `Authorization` header. A password is not required.
+
+
+    Your API keys are sensitive credentials—please take care to secure them properly so that they don’t fall into the wrong hands. If you need to rotate your API keys for any reason, simply reach out to [Flexa Support](mailto:support@flexa.co).
+
+
+    If you want to make requests against the Flexa API without moving any actual value, use your test API keys. Test API keys are prefixed `publishable_test_` or `secret_test_`, and can be used to experiment with the Flexa API using test mode assets, which include all popular testnet assets as well as Flexa Credit (CR).
+
+    '
+  version: '2025-12-18'
+  contact:
+    name: Flexa Support
+    url: https://support.flexa.co
+    email: support@flexa.co
+  license:
+    name: CC BY-ND 4.0
+    url: https://creativecommons.org/licenses/by-nd/4.0/
+servers:
+- url: https://api.flexa.co
+security:
+- BasicAuth: []
+tags:
+- name: Commerce Intents
+  description: 'Commerce intents offer a versatile way to process digital asset payments from your customers using any sales channel.
+
+    '
+paths:
+  /commerce_intents:
+    post:
+      tags:
+      - Commerce Intents
+      summary: Create a Commerce Intent
+      description: 'Creates a commerce intent object.
+
+
+        Commerce intents are especially powereful because they allow you to accept any Flexa-supported digital asset from your customers without any additional configuration.
+
+
+        If you’re scanning a Flexa barcode in person from a customer device, include the barcode string as `authorization.number` in your request, and Flexa will collect payment directly from that customer.
+
+
+        Or, to create an open-ended commerce intent and accept payments from any customer in other contexts—including in-person payments using QR codes, online payments using payment links, and more—simply exclude the `authorization` object from your request entirely.
+
+        '
+      parameters:
+      - $ref: '#/components/parameters/FlexaVersion'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CommerceIntentCreateRequest'
+            example:
+              mid: '370748471846382'
+              amount: '19.99'
+              asset: iso4217/USD
+              description: 'Invoice #BR1984'
+      responses:
+        '201':
+          description: Created
+          headers:
+            Flexa-Version:
+              $ref: '#/components/headers/Flexa-Version'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommerceIntent'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /commerce_intents/{id}:
+    get:
+      tags:
+      - Commerce Intents
+      summary: Retrieve a Commerce Intent
+      description: Retrieves the details of a previously created commerce intent.
+      parameters:
+      - $ref: '#/components/parameters/FlexaVersion'
+      responses:
+        '200':
+          description: OK
+          headers:
+            Flexa-Version:
+              $ref: '#/components/headers/Flexa-Version'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommerceIntent'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /commerce_intents/{id}/cancel:
+    post:
+      tags:
+      - Commerce Intents
+      summary: Cancel a Commerce Intent
+      description: 'Cancels a commerce intent.
+
+
+        As long as a commerce intent has not already succeeded, it can be canceled, which will prevent any customers from being able to fulfill it. As a best practice, you should cancel any commerce intents you no longer plan to use.
+
+        '
+      parameters:
+      - $ref: '#/components/parameters/FlexaVersion'
+      responses:
+        '200':
+          description: OK
+          headers:
+            Flexa-Version:
+              $ref: '#/components/headers/Flexa-Version'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommerceIntent'
+              example:
+                id: ci_8wqPG5gM8vQxF4PCP8mp8
+                object: commerce_intent
+                amount: '19.99'
+                amount_capturable: '0.00'
+                amount_received: '0.00'
+                asset: iso4217/USD
+                description: 'Invoice #BR1984'
+                display_id: AB4JJP
+                link:
+                  id: link_RjF8vWwGc4JmJgchmf3Jr
+                  object: link
+                  active: false
+                  after_completion:
+                    redirect_url: 'null'
+                  amount: '19.99'
+                  asset: iso4217/USD
+                  restrictions:
+                    chains: []
+                  reusable: false
+                  suggested_apps: []
+                  test_mode: false
+                  theme: {}
+                  type: pay
+                  url: https://pay.flexa.co/M8jw5PMX
+                  created: 1520845080
+                  updated: 1520845084
+                mid: '370748471846382'
+                status: canceled
+                test_mode: false
+                created: 1520845080
+                updated: 1520845084
+        '403':
+          $ref: '#/components/responses/Forbidden'
+components:
+  schemas:
+    Link:
+      type: object
+      properties:
+        id:
+          type: string
+          description: A unique identifier for the object.
+          example: link_RjF8vWwGc4JmJgchmf3Jr
+        object:
+          type: string
+          example: link
+        active:
+          type: boolean
+          description: Whether the link can be accessed by customers
+          example: true
+        after_completion:
+          type: object
+          description: Actions to be taken after the link’s corresponding commerce intent is successfully completed.
+          properties:
+            redirect_url:
+              type:
+              - string
+              - 'null'
+              description: The URL to which customers will be redirected after the commerce intent is successfully completed.
+              example: null
+        amount:
+          type: string
+          description: The amount intended to be collected from the customer, formatted according to the asset of the link.
+          example: '19.99'
+        asset:
+          type: string
+          description: The unit of account for this link.
+          example: iso4217/USD
+        restrictions:
+          type: object
+          description: A set of parameters limiting the ways in which Flexa will enable customers to interact with this commerce intent.
+          properties:
+            chains:
+              type: array
+              description: The set of chains, as [CAIP-2](https://chainagnostic.org/CAIPs/caip-2) IDs, that the customer will be limited to using when interacting with this commerce intent.
+              items:
+                type: string
+              example: []
+        reusable:
+          type: boolean
+          description: Whether this link can be reused to pay multiple commerce intents.
+          example: false
+        suggested_apps:
+          type: array
+          description: The set of apps that will be suggested to the customer.
+          items:
+            type: string
+          example: []
+        test_mode:
+          type: boolean
+          description: Whether this link was created with a test API key and thus may be paid with valueless, test mode assets (true) or a live API key and therefore must be paid using live mode assets with real value (false).
+          example: false
+        theme:
+          type: object
+          description: Theming for the link.
+          example: {}
+        type:
+          type: string
+          enum:
+          - pay
+          description: The type of link.
+          example: pay
+        url:
+          type: string
+          description: The URL of the link, for presenting to customers.
+          example: https://pay.flexa.co/M8jw5PMX
+        created:
+          type: integer
+          description: The time at which this link was created, in non-leap seconds since the Unix epoch.
+          example: 1520845080
+        updated:
+          type: integer
+          description: The time at which this link was last updated, in non-leap seconds since the Unix epoch.
+          example: 1520845080
+    BadRequestError:
+      x-scalar-ignore: true
+      description: RFC 7807 (https://datatracker.ietf.org/doc/html/rfc7807)
+      type: object
+      properties:
+        type:
+          type: string
+          examples:
+          - https://example.com/errors/bad-request
+        title:
+          type: string
+          examples:
+          - Bad Request
+        status:
+          type: integer
+          format: int64
+          examples:
+          - 400
+        detail:
+          type: string
+          examples:
+          - The request was invalid.
+    CommerceIntentCreateRequest:
+      type: object
+      required:
+      - amount
+      properties:
+        amount:
+          type: string
+          description: The amount to collect from the customer. The minimum amount that can be collected is the smallest decimal unit of the `asset` (e.g., $0.01 for `iso4217/USD`).
+          example: '19.99'
+        asset:
+          type: string
+          description: The unit of account to use for this commerce intent (i.e., the currency used to display the sale price to the customer). Used to calculate the exchange rate for payments and refunds. Defaults to the business's unit of account (or the MID's unit of account, if configured).
+        authorization:
+          type: object
+          description: Relevant data for authorizing this commerce intent in person when scanning barcode data from a customer-presented device. Should not be provided when creating an open-ended commerce intent that will be completed via a payment link.
+          properties:
+            number:
+              type: string
+              description: The numeric string collected from a customer-presented device (e.g., a smartphone) by a barcode scanner when accepting payments in person. Begins with `84` for customers using &ldquo;Pay with Flexa.&rdquo;
+              example: '8412345678901337'
+        capture_method:
+          type: string
+          enum:
+          - automatic
+          description: 'The method to use for capturing this payment from the customer: `automatic` (the commerce intent is immediately captured upon authorization). Defaults to `automatic`.'
+        description:
+          type: string
+          description: Optional internal field for storing additional context about this commerce intent. Not shown to customers.
+        link:
+          type: object
+          description: Optional parameters for customizing the behavior of this commerce intent's automatically generated payment link. Not applicable to commerce intents created using customer-presented `authorization` data.
+          properties:
+            after_completion:
+              type: object
+              description: Optional parameters for actions to be taken after the link’s commerce intent is successfully completed.
+              properties:
+                redirect_url:
+                  type: string
+                  description: The URL to which the customer will be redirected after a commerce intent is successfully completed. Useful for attributing a commerce intent to a specific cart or checkout flow.
+            restrictions:
+              type: object
+              description: A set of parameters that can be used to restrict the ways in which customers can interact with this commerce intent.
+              properties:
+                chains:
+                  type: array
+                  items:
+                    type: string
+                  description: The set of chains, specified as [CAIP-2](https://chainagnostic.org/CAIPs/caip-2) IDs, that the customer will be limited to using when interacting with this commerce intent. If empty, all chains will be made available.
+                  example: []
+        mid:
+          type: string
+          description: The MID to use for processing this commerce intent. Only required for teams with access to multiple MIDs.
+    NotFoundError:
+      x-scalar-ignore: true
+      description: RFC 7807 (https://datatracker.ietf.org/doc/html/rfc7807)
+      type: object
+      properties:
+        type:
+          type: string
+          examples:
+          - https://example.com/errors/not-found
+        title:
+          type: string
+          examples:
+          - Not Found
+        status:
+          type: integer
+          format: int64
+          examples:
+          - 404
+        detail:
+          type: string
+          examples:
+          - The resource you are trying to access does not exist.
+    CommerceIntent:
+      type: object
+      properties:
+        id:
+          type: string
+          description: A unique identifier for the object.
+          example: ci_8wqPG5gM8vQxF4PCP8mp8
+        object:
+          type: string
+          example: commerce_intent
+        amount:
+          type: string
+          description: The amount intended to be collected from the customer, formatted according to the asset of the commerce intent.
+          example: '19.99'
+        amount_capturable:
+          type:
+          - string
+          - 'null'
+          description: The total amount that can be captured from the customer using this commerce intent.
+          example: null
+        amount_received:
+          type:
+          - string
+          - 'null'
+          description: The total amount that has been received from the customer using this commerce intent.
+          example: null
+        asset:
+          type: string
+          description: The unit of account for this commerce intent. Used to calculate the exchange rate for payments and refunds.
+          example: iso4217/USD
+        description:
+          type:
+          - string
+          - 'null'
+          description: An internal field for storing additional context about this commerce intent. Not shown to customers.
+          example: 'Invoice #BR1984'
+        display_id:
+          type: string
+          description: A unique, customer-facing identifier for this commerce intent, which can be useful for quickly tracking down the commerce intent that's associated with a specific payment or refund. Shown to customers in apps and receipts.
+          example: AB4JJP
+        link:
+          description: A link object that details the one-time–use payment link that can be shared with customers to pay this commerce intent.
+          $ref: '#/components/schemas/Link'
+        mid:
+          type: string
+          description: The MID used for processing this commerce intent.
+          example: '370748471846382'
+        status:
+          type: string
+          enum:
+          - pending
+          - succeeded
+          - canceled
+          description: The current status of this commerce intent with respect to the customer and their funds.
+          example: pending
+        test_mode:
+          type: boolean
+          description: Whether this commerce intent was created with a test API key and thus may be paid with valueless, test mode assets (true) or a live API key and therefore must be paid using live mode assets with real value (false).
+          example: false
+        created:
+          type: integer
+          description: The time at which this commerce intent was created, in non-leap seconds since the Unix epoch.
+          example: 1520845080
+        updated:
+          type: integer
+          description: The time at which this commerce intent was last updated, in non-leap seconds since the Unix epoch.
+          example: 1520845080
+    ForbiddenError:
+      x-scalar-ignore: true
+      description: RFC 7807 (https://datatracker.ietf.org/doc/html/rfc7807)
+      type: object
+      properties:
+        type:
+          type: string
+          examples:
+          - https://example.com/errors/forbidden
+        title:
+          type: string
+          examples:
+          - Forbidden
+        status:
+          type: integer
+          format: int64
+          examples:
+          - 403
+        detail:
+          type: string
+          examples:
+          - You are not authorized to access this resource.
+  responses:
+    BadRequest:
+      description: Bad Request
+      headers:
+        Flexa-Version:
+          $ref: '#/components/headers/Flexa-Version'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BadRequestError'
+    NotFound:
+      description: Not Found
+      headers:
+        Flexa-Version:
+          $ref: '#/components/headers/Flexa-Version'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NotFoundError'
+    Forbidden:
+      description: Forbidden
+      headers:
+        Flexa-Version:
+          $ref: '#/components/headers/Flexa-Version'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ForbiddenError'
+  parameters:
+    FlexaVersion:
+      in: header
+      name: Flexa-Version
+      description: The API version to use for processing this request.
+      schema:
+        type: string
+        example: '2025-12-18'
+  headers:
+    Flexa-Version:
+      description: The API version used to process this request.
+      schema:
+        type: string
+        example: '2025-12-18'
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic
+      description: Basic HTTP authentication
+x-ext-urls: {}

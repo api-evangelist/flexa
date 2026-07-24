@@ -1,0 +1,244 @@
+openapi: 3.1.1
+info:
+  title: Flexa Assets API
+  description: 'The Flexa API offers access to Flexa’s powerful, instant, and completely fraud-resistant platform for accepting digital asset payments from your customers.
+
+
+    # Authentication
+
+
+    All requests to the Flexa API are authenticated with API keys, which are accepted using [HTTP Basic Authentication](https://en.wikipedia.org/wiki/Basic_access_authentication). To connect, simply include your API key as the “username” value when providing the `Authorization` header. A password is not required.
+
+
+    Your API keys are sensitive credentials—please take care to secure them properly so that they don’t fall into the wrong hands. If you need to rotate your API keys for any reason, simply reach out to [Flexa Support](mailto:support@flexa.co).
+
+
+    If you want to make requests against the Flexa API without moving any actual value, use your test API keys. Test API keys are prefixed `publishable_test_` or `secret_test_`, and can be used to experiment with the Flexa API using test mode assets, which include all popular testnet assets as well as Flexa Credit (CR).
+
+    '
+  version: '2025-12-18'
+  contact:
+    name: Flexa Support
+    url: https://support.flexa.co
+    email: support@flexa.co
+  license:
+    name: CC BY-ND 4.0
+    url: https://creativecommons.org/licenses/by-nd/4.0/
+servers:
+- url: https://api.flexa.co
+security:
+- BasicAuth: []
+tags:
+- name: Assets
+  description: 'Assets encompass all the value that flows through the Flexa platform. In the Flexa API, both national currencies (“fiat“) and digital currencies (“crypto“ or “digital assets“) are returned together in one collection.
+
+
+    The Flexa API uses [CAIP](https://chainagnostic.org/CAIPs/caip-19)-style IDs for all assets. National currency asset IDs are all prefixed with “iso4217/” and use [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) 3-digit alphabetic codes. For example, ether on Ethereum mainnet is `eip155:1/slip44:60`, and the Canadian dollar is `iso4217/CAD`.
+
+    '
+paths:
+  /assets:
+    get:
+      tags:
+      - Assets
+      summary: List all Assets
+      description: Returns a list of all assets supported by Flexa for payments.
+      parameters:
+      - $ref: '#/components/parameters/FlexaVersion'
+      responses:
+        '200':
+          description: OK
+          headers:
+            Flexa-Version:
+              $ref: '#/components/headers/Flexa-Version'
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/Collection'
+                - type: object
+                  properties:
+                    url:
+                      type: string
+                      example: /assets
+                    data:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/Asset'
+  /assets/{id}:
+    get:
+      tags:
+      - Assets
+      summary: Retrieve an Asset
+      description: Retrieves the details of a specific asset.
+      parameters:
+      - $ref: '#/components/parameters/FlexaVersion'
+      responses:
+        '200':
+          description: OK
+          headers:
+            Flexa-Version:
+              $ref: '#/components/headers/Flexa-Version'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Asset'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  schemas:
+    Asset:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The [CAIP-19](https://chainagnostic.org/CAIPs/caip-19) ID of the asset. National currencies such as the United States dollar are identified using the prefix “iso4217/” and the 3-digit alphabetic code of [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).
+          example: eip155:1/slip44:60
+        object:
+          type: string
+          example: asset
+        chain:
+          description: A chain object including details of the chain on which this asset was issued. Not applicable to national currency assets.
+          $ref: '#/components/schemas/Chain'
+        color:
+          type: string
+          description: A hexadecimal color that can be used for tinting any UI related to this asset.
+          example: '#5700ff'
+        decimals:
+          type: integer
+          description: The number of decimal places used by this asset.
+          example: 18
+        icon_url:
+          type: string
+          description: The URL for the asset's icon.
+          example: https://flexa.media/assets/ether.svg
+        name:
+          type: string
+          description: The common name of the asset.
+          example: Ether
+        namespace:
+          type: string
+          description: The [CAIP namespace](https://namespaces.chainagnostic.org) of the asset.
+          example: eip155
+        profile:
+          type: string
+          description: The ID of the asset profile for this asset.
+          example: assetpf_f5q8f4J97jcxPW5Fwwv6g
+        symbol:
+          type: string
+          description: The common trading symbol of the asset.
+          example: ETH
+        test_mode:
+          type: boolean
+          description: Whether this asset is valueless and thus available in test mode (true) or live mode where it can be used to exchange real value (false).
+          example: false
+        created:
+          type: integer
+          description: The time at which this asset was enabled on Flexa, in non-leap seconds since the Unix epoch.
+          example: 1520845080
+        updated:
+          type: integer
+          description: The time at which Flexa’s information about this asset was last updated, in non-leap seconds since the Unix epoch.
+          example: 1520845080
+    NotFoundError:
+      x-scalar-ignore: true
+      description: RFC 7807 (https://datatracker.ietf.org/doc/html/rfc7807)
+      type: object
+      properties:
+        type:
+          type: string
+          examples:
+          - https://example.com/errors/not-found
+        title:
+          type: string
+          examples:
+          - Not Found
+        status:
+          type: integer
+          format: int64
+          examples:
+          - 404
+        detail:
+          type: string
+          examples:
+          - The resource you are trying to access does not exist.
+    Chain:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The [CAIP-2](https://chainagnostic.org/CAIPs/caip-2) ID of the chain.
+          example: eip155:1
+        object:
+          type: string
+          example: chain
+        name:
+          type: string
+          description: The name of the chain.
+          example: Ethereum
+        namespace:
+          type: string
+          description: The [CAIP namespace](https://namespaces.chainagnostic.org) of the chain.
+          example: eip155
+        native_asset:
+          type: string
+          description: The chain's native asset, specified as a [CAIP-19](https://chainagnostic.org/CAIPs/caip-19) ID.
+          example: eip155:1/slip44:60
+        network:
+          type: string
+          description: The ID of the network to which this chain is associated.
+          example: netwrk_7cM535QGJMQ5F6Q5xW4Jh
+        test_network:
+          type: boolean
+          description: Whether this chain serves as a test network on which developers can make valueless transactions.
+          example: false
+        created:
+          type: integer
+          description: The time at which this chain was enabled on Flexa, in non-leap seconds since the Unix epoch.
+          example: 1520845080
+        updated:
+          type: integer
+          description: The time at which Flexa’s information about this chain was last updated, in non-leap seconds since the Unix epoch.
+          example: 1520845080
+    Collection:
+      description: A collection
+      type: object
+      properties:
+        object:
+          type: string
+          example: collection
+        url:
+          type: string
+        has_more:
+          type: boolean
+          example: true
+  parameters:
+    FlexaVersion:
+      in: header
+      name: Flexa-Version
+      description: The API version to use for processing this request.
+      schema:
+        type: string
+        example: '2025-12-18'
+  responses:
+    NotFound:
+      description: Not Found
+      headers:
+        Flexa-Version:
+          $ref: '#/components/headers/Flexa-Version'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NotFoundError'
+  headers:
+    Flexa-Version:
+      description: The API version used to process this request.
+      schema:
+        type: string
+        example: '2025-12-18'
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic
+      description: Basic HTTP authentication
+x-ext-urls: {}

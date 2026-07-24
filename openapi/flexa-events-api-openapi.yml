@@ -1,0 +1,157 @@
+openapi: 3.1.1
+info:
+  title: Flexa Assets Events API
+  description: 'The Flexa API offers access to Flexa’s powerful, instant, and completely fraud-resistant platform for accepting digital asset payments from your customers.
+
+
+    # Authentication
+
+
+    All requests to the Flexa API are authenticated with API keys, which are accepted using [HTTP Basic Authentication](https://en.wikipedia.org/wiki/Basic_access_authentication). To connect, simply include your API key as the “username” value when providing the `Authorization` header. A password is not required.
+
+
+    Your API keys are sensitive credentials—please take care to secure them properly so that they don’t fall into the wrong hands. If you need to rotate your API keys for any reason, simply reach out to [Flexa Support](mailto:support@flexa.co).
+
+
+    If you want to make requests against the Flexa API without moving any actual value, use your test API keys. Test API keys are prefixed `publishable_test_` or `secret_test_`, and can be used to experiment with the Flexa API using test mode assets, which include all popular testnet assets as well as Flexa Credit (CR).
+
+    '
+  version: '2025-12-18'
+  contact:
+    name: Flexa Support
+    url: https://support.flexa.co
+    email: support@flexa.co
+  license:
+    name: CC BY-ND 4.0
+    url: https://creativecommons.org/licenses/by-nd/4.0/
+servers:
+- url: https://api.flexa.co
+security:
+- BasicAuth: []
+tags:
+- name: Events
+  description: 'Events are created when any of the core resources on the Flexa platform change in a meaningful way, such as when a commerce intent succeeds or a digital asset transaction is requested. Clients subscribe to a stream that is provided over [Server-Sent Events (SSE)](https://en.wikipedia.org/wiki/Server-sent_events).
+
+    '
+paths:
+  /events:
+    get:
+      tags:
+      - Events
+      summary: Stream new Events
+      description: "Streams all of an API key's events as they occur using [Server-Sent Events (SSE)](https://en.wikipedia.org/wiki/Server-sent_events).\n\nWe strongly recommend subscribing to the SSE stream of event data by providing the `Accept: text/event-stream` header with your request. \nWhen using SSE, the server will maintain a long-lived connection and will return events as chunks, each consisting of an event `type` and `id` as well as the event data. Each chunk will be separated by blank lines, as in the example below:\n\n```text\nevent: commerce_intent.created\nid: event_JQ9pFH8FHrV8WPH5Fxq8m\ndata: { \"id\": \"event_FQVccxrX3RgJ9X5q94Cp9\", \"object\": \"event\", \"api_version\": \"2025-12-18\", \"data\": { ... }, \"type\": \"commerce_intent.created\", \"created\": 1706753855 }\n\ndata: keep-alive\n\nevent: commerce_intent.succeeded\nid: event_JQ9pFH8FHrV8WPH5Fxq8m\ndata: { \"id\": \"event_JQ9pFH8FHrV8WPH5Fxq8m\", \"object\": \"event\", \"api_version\": \"2025-12-18\", \"data\": { ... }, \"type\": \"commerce_intent.succeeded\", \"created\": 1706753857 }\n``` \n\nWhen subscribed to server-sent events, the server will pad the response with a single-line `data: keep-alive` heartbeat during every second that no events are sent while the connection remains open.\n"
+      parameters:
+      - $ref: '#/components/parameters/FlexaVersion'
+      - in: header
+        name: Accept
+        schema:
+          type: string
+          example: text/event-stream
+        required: true
+      - name: types
+        in: query
+        description: An array of up to 20 strings (separated by commas) specifying the types of events to return in the response. Can also be queried as `type` in singular form if so desired.
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      responses:
+        '200':
+          description: OK
+          headers:
+            Flexa-Version:
+              $ref: '#/components/headers/Flexa-Version'
+          content:
+            text/event-stream:
+              schema:
+                $ref: '#/components/schemas/Event'
+              example:
+              - id: event_FQVccxrX3RgJ9X5q94Cp9
+                object: event
+                api_version: '2025-12-18'
+                data:
+                  id: ci_8wqPG5gM8vQxF4PCP8mp8
+                  object: commerce_intent
+                  amount: '19.99'
+                  amount_capturable: 'null'
+                  amount_received: 'null'
+                  asset: iso4217/USD
+                  description: 'Invoice #BR1984'
+                  display_id: AB4JJP
+                  link:
+                    id: link_RjF8vWwGc4JmJgchmf3Jr
+                    object: link
+                    active: true
+                    after_completion:
+                      redirect_url: 'null'
+                    amount: '19.99'
+                    asset: iso4217/USD
+                    restrictions:
+                      chains: []
+                    reusable: false
+                    suggested_apps: []
+                    test_mode: false
+                    theme: {}
+                    type: pay
+                    url: https://pay.flexa.co/M8jw5PMX
+                    created: 1520845080
+                    updated: 1520845080
+                  mid: '370748471846382'
+                  status: pending
+                  test_mode: false
+                  created: 1520845080
+                  updated: 1520845080
+                type: commerce_intent.created
+                created: 1520845080
+components:
+  headers:
+    Flexa-Version:
+      description: The API version used to process this request.
+      schema:
+        type: string
+        example: '2025-12-18'
+  parameters:
+    FlexaVersion:
+      in: header
+      name: Flexa-Version
+      description: The API version to use for processing this request.
+      schema:
+        type: string
+        example: '2025-12-18'
+  schemas:
+    Event:
+      type: object
+      properties:
+        id:
+          type: string
+          description: A unique identifier for the object.
+          example: event_FQVccxrX3RgJ9X5q94Cp9
+        object:
+          type: string
+          example: event
+        api_version:
+          type: string
+          description: The version of the API corresponding to the shape of the event's subject.
+          example: '2025-12-18'
+        data:
+          type: object
+          description: The subject of the event as recorded at the time the event occurred.
+        type:
+          type: string
+          enum:
+          - commerce_intent.created
+          - commerce_intent.succeeded
+          - commerce_intent.canceled
+          description: The type of event that was recorded.
+          example: commerce_intent.created
+        created:
+          type: integer
+          description: The time at which the event occurred, in non-leap seconds since the Unix epoch.
+          example: 1520845080
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic
+      description: Basic HTTP authentication
+x-ext-urls: {}
