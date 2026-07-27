@@ -1,0 +1,20 @@
+{
+  "provider": "flexa",
+  "sources": [
+    "flexa-assets-api-openapi.yml",
+    "flexa-commerce-intents-api-openapi.yml",
+    "flexa-events-api-openapi.yml",
+    "flexa-refunds-api-openapi.yml"
+  ],
+  "outputs": [
+    "flexa-assets-api-openapi.yml",
+    "flexa-commerce-intents-api-openapi.yml",
+    "flexa-events-api-openapi.yml",
+    "flexa-refunds-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}

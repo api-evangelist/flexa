@@ -1,0 +1,44 @@
+generated: '2026-07-19'
+method: searched
+source: https://docs.flexa.co/api-reference/introduction
+derived_from: openapi/flexa-openapi.json
+authentication:
+  style: HTTP Basic Authentication with API key as username (no password)
+  ref: authentication/flexa-authentication.yml
+versioning:
+  scheme: date-based
+  current: '2025-12-18'
+  signal: >-
+    The API version is a calendar date (info.version 2025-12-18); events carry an
+    api_version field indicating the shape of the event's subject.
+  ref: lifecycle/flexa-lifecycle.yml
+pagination:
+  style: collection-envelope
+  response_fields:
+  - object (constant "collection")
+  - url
+  - has_more (boolean; more records available beyond this page)
+  note: >-
+    List endpoints (e.g. GET /assets, GET /events) return a Collection wrapper
+    with a has_more flag; individual items are returned in a data/list array.
+identity_assets:
+  scheme: >-
+    Assets are identified with CAIP-style paths (e.g. assets/iso4217/usd for
+    fiat, chain-scoped identifiers for digital assets).
+error_envelope:
+  format: rfc7807
+  media_type: application/json
+  fields: [type, title, status, detail]
+  ref: errors/flexa-problem-types.yml
+idempotency:
+  supported: unknown
+  note: >-
+    Neither the OpenAPI nor the public docs document an idempotency-key header or
+    parameter. Not asserted (no fabrication). Commerce intents are the intended
+    unit of retry-safe payment collection.
+core_resources:
+- commerce_intents
+- assets
+- refunds
+- events
+- links

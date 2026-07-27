@@ -1,0 +1,35 @@
+generated: '2026-07-19'
+method: searched
+source: https://docs.flexa.co/payments/testing
+summary: >-
+  Flexa provides "test mode", a production-level testing environment that
+  exercises an integration without moving real value. New integrations start in
+  test mode by default; test mode can be re-enabled after go-live via the
+  Dashboard / Point of Sale app, or forced by using test-mode API keys.
+test_vs_live:
+  selector: API key prefix (or the test-mode switch in Dashboard / Point of Sale app)
+  test_key_prefixes:
+  - publishable_test_
+  - secret_test_
+  live_key_prefix: secret_live_
+  live_key_note: Live keys only function once the business is approved to process payments.
+test_assets:
+  supported:
+  - name: Flexa Credit
+    symbol: CR
+    type: ERC-20 token on the Ethereum main network
+    note: >-
+      A valueless test asset. Flexa sends enough Credit to make several hundred
+      test payments when an Ethereum wallet address is provided at signup.
+  - name: Testnet assets
+    note: Test mode also supports popular testnet assets.
+  custody_guidance: >-
+    Only use Credit with self-custody wallet apps (e.g. MetaMask, Base, Rainbow);
+    exchange or managed-custody wallets (Coinbase, Kraken) may be unable to
+    retrieve or send Credit for testing.
+faucet:
+  method: Email faucet@flexa.co from the email associated with your Flexa developer account, including your wallet address.
+  contact: faucet@flexa.co
+notes:
+- Test mode uses the same wallet apps customers use — no test networks or special app configuration required.
+- No real-world financial transactions or downstream effects are generated in test mode.

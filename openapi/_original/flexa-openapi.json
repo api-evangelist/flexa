@@ -1,0 +1,1301 @@
+{
+  "openapi": "3.1.1",
+  "info": {
+    "title": "Flexa API",
+    "description": "The Flexa API offers access to Flexa’s powerful, instant, and completely fraud-resistant platform for accepting digital asset payments from your customers.\n\n# Authentication\n\nAll requests to the Flexa API are authenticated with API keys, which are accepted using [HTTP Basic Authentication](https://en.wikipedia.org/wiki/Basic_access_authentication). To connect, simply include your API key as the “username” value when providing the `Authorization` header. A password is not required.\n\nYour API keys are sensitive credentials—please take care to secure them properly so that they don’t fall into the wrong hands. If you need to rotate your API keys for any reason, simply reach out to [Flexa Support](mailto:support@flexa.co).\n\nIf you want to make requests against the Flexa API without moving any actual value, use your test API keys. Test API keys are prefixed `publishable_test_` or `secret_test_`, and can be used to experiment with the Flexa API using test mode assets, which include all popular testnet assets as well as Flexa Credit (CR).\n",
+    "version": "2025-12-18",
+    "contact": {
+      "name": "Flexa Support",
+      "url": "https://support.flexa.co",
+      "email": "support@flexa.co"
+    },
+    "license": {
+      "name": "CC BY-ND 4.0",
+      "url": "https://creativecommons.org/licenses/by-nd/4.0/"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://api.flexa.co"
+    }
+  ],
+  "security": [
+    {
+      "BasicAuth": []
+    }
+  ],
+  "tags": [
+    {
+      "name": "Assets",
+      "description": "Assets encompass all the value that flows through the Flexa platform. In the Flexa API, both national currencies (“fiat“) and digital currencies (“crypto“ or “digital assets“) are returned together in one collection.\n\nThe Flexa API uses [CAIP](https://chainagnostic.org/CAIPs/caip-19)-style IDs for all assets. National currency asset IDs are all prefixed with “iso4217/” and use [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) 3-digit alphabetic codes. For example, ether on Ethereum mainnet is `eip155:1/slip44:60`, and the Canadian dollar is `iso4217/CAD`.\n"
+    },
+    {
+      "name": "Commerce Intents",
+      "description": "Commerce intents offer a versatile way to process digital asset payments from your customers using any sales channel.\n"
+    },
+    {
+      "name": "Events",
+      "description": "Events are created when any of the core resources on the Flexa platform change in a meaningful way, such as when a commerce intent succeeds or a digital asset transaction is requested. Clients subscribe to a stream that is provided over [Server-Sent Events (SSE)](https://en.wikipedia.org/wiki/Server-sent_events).\n"
+    },
+    {
+      "name": "Refunds",
+      "description": "Refunds are the only way by which a Flexa payment can be reversed. Refunds are always initiated by the recipient, and can be made for either a partial amount or the full value of the original payment.\n\nBecause Flexa supports payments using a wide variety of assets, including some that are highly price-volatile, refunds are always processed using current exchange rates. For example, if a customer makes a payment using bitcoin, and the commerce intent wasn’t denominated in bitcoin, the customer may not receive a refund for the exact same amount of bitcoin that they originally paid. Instead, the payment amount will be converted back into bitcoin using the market exchange rate before it’s refunded.\n"
+    }
+  ],
+  "paths": {
+    "/assets": {
+      "get": {
+        "tags": [
+          "Assets"
+        ],
+        "summary": "List all Assets",
+        "description": "Returns a list of all assets supported by Flexa for payments.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/FlexaVersion"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "headers": {
+              "Flexa-Version": {
+                "$ref": "#/components/headers/Flexa-Version"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Collection"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "url": {
+                          "type": "string",
+                          "example": "/assets"
+                        },
+                        "data": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/Asset"
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/assets/{id}": {
+      "get": {
+        "tags": [
+          "Assets"
+        ],
+        "summary": "Retrieve an Asset",
+        "description": "Retrieves the details of a specific asset.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/FlexaVersion"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "headers": {
+              "Flexa-Version": {
+                "$ref": "#/components/headers/Flexa-Version"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Asset"
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/commerce_intents": {
+      "post": {
+        "tags": [
+          "Commerce Intents"
+        ],
+        "summary": "Create a Commerce Intent",
+        "description": "Creates a commerce intent object.\n\nCommerce intents are especially powereful because they allow you to accept any Flexa-supported digital asset from your customers without any additional configuration.\n\nIf you’re scanning a Flexa barcode in person from a customer device, include the barcode string as `authorization.number` in your request, and Flexa will collect payment directly from that customer.\n\nOr, to create an open-ended commerce intent and accept payments from any customer in other contexts—including in-person payments using QR codes, online payments using payment links, and more—simply exclude the `authorization` object from your request entirely.\n",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/FlexaVersion"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CommerceIntentCreateRequest"
+              },
+              "example": {
+                "mid": "370748471846382",
+                "amount": "19.99",
+                "asset": "iso4217/USD",
+                "description": "Invoice #BR1984"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "headers": {
+              "Flexa-Version": {
+                "$ref": "#/components/headers/Flexa-Version"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommerceIntent"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          }
+        }
+      }
+    },
+    "/commerce_intents/{id}": {
+      "get": {
+        "tags": [
+          "Commerce Intents"
+        ],
+        "summary": "Retrieve a Commerce Intent",
+        "description": "Retrieves the details of a previously created commerce intent.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/FlexaVersion"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "headers": {
+              "Flexa-Version": {
+                "$ref": "#/components/headers/Flexa-Version"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommerceIntent"
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/commerce_intents/{id}/cancel": {
+      "post": {
+        "tags": [
+          "Commerce Intents"
+        ],
+        "summary": "Cancel a Commerce Intent",
+        "description": "Cancels a commerce intent.\n\nAs long as a commerce intent has not already succeeded, it can be canceled, which will prevent any customers from being able to fulfill it. As a best practice, you should cancel any commerce intents you no longer plan to use.\n",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/FlexaVersion"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "headers": {
+              "Flexa-Version": {
+                "$ref": "#/components/headers/Flexa-Version"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommerceIntent"
+                },
+                "example": {
+                  "id": "ci_8wqPG5gM8vQxF4PCP8mp8",
+                  "object": "commerce_intent",
+                  "amount": "19.99",
+                  "amount_capturable": "0.00",
+                  "amount_received": "0.00",
+                  "asset": "iso4217/USD",
+                  "description": "Invoice #BR1984",
+                  "display_id": "AB4JJP",
+                  "link": {
+                    "id": "link_RjF8vWwGc4JmJgchmf3Jr",
+                    "object": "link",
+                    "active": false,
+                    "after_completion": {
+                      "redirect_url": "null"
+                    },
+                    "amount": "19.99",
+                    "asset": "iso4217/USD",
+                    "restrictions": {
+                      "chains": []
+                    },
+                    "reusable": false,
+                    "suggested_apps": [],
+                    "test_mode": false,
+                    "theme": {},
+                    "type": "pay",
+                    "url": "https://pay.flexa.co/M8jw5PMX",
+                    "created": 1520845080,
+                    "updated": 1520845084
+                  },
+                  "mid": "370748471846382",
+                  "status": "canceled",
+                  "test_mode": false,
+                  "created": 1520845080,
+                  "updated": 1520845084
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          }
+        }
+      }
+    },
+    "/events": {
+      "get": {
+        "tags": [
+          "Events"
+        ],
+        "summary": "Stream new Events",
+        "description": "Streams all of an API key's events as they occur using [Server-Sent Events (SSE)](https://en.wikipedia.org/wiki/Server-sent_events).\n\nWe strongly recommend subscribing to the SSE stream of event data by providing the `Accept: text/event-stream` header with your request. \nWhen using SSE, the server will maintain a long-lived connection and will return events as chunks, each consisting of an event `type` and `id` as well as the event data. Each chunk will be separated by blank lines, as in the example below:\n\n```text\nevent: commerce_intent.created\nid: event_JQ9pFH8FHrV8WPH5Fxq8m\ndata: { \"id\": \"event_FQVccxrX3RgJ9X5q94Cp9\", \"object\": \"event\", \"api_version\": \"2025-12-18\", \"data\": { ... }, \"type\": \"commerce_intent.created\", \"created\": 1706753855 }\n\ndata: keep-alive\n\nevent: commerce_intent.succeeded\nid: event_JQ9pFH8FHrV8WPH5Fxq8m\ndata: { \"id\": \"event_JQ9pFH8FHrV8WPH5Fxq8m\", \"object\": \"event\", \"api_version\": \"2025-12-18\", \"data\": { ... }, \"type\": \"commerce_intent.succeeded\", \"created\": 1706753857 }\n``` \n\nWhen subscribed to server-sent events, the server will pad the response with a single-line `data: keep-alive` heartbeat during every second that no events are sent while the connection remains open.\n",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/FlexaVersion"
+          },
+          {
+            "in": "header",
+            "name": "Accept",
+            "schema": {
+              "type": "string",
+              "example": "text/event-stream"
+            },
+            "required": true
+          },
+          {
+            "name": "types",
+            "in": "query",
+            "description": "An array of up to 20 strings (separated by commas) specifying the types of events to return in the response. Can also be queried as `type` in singular form if so desired.",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "headers": {
+              "Flexa-Version": {
+                "$ref": "#/components/headers/Flexa-Version"
+              }
+            },
+            "content": {
+              "text/event-stream": {
+                "schema": {
+                  "$ref": "#/components/schemas/Event"
+                },
+                "example": [
+                  {
+                    "id": "event_FQVccxrX3RgJ9X5q94Cp9",
+                    "object": "event",
+                    "api_version": "2025-12-18",
+                    "data": {
+                      "id": "ci_8wqPG5gM8vQxF4PCP8mp8",
+                      "object": "commerce_intent",
+                      "amount": "19.99",
+                      "amount_capturable": "null",
+                      "amount_received": "null",
+                      "asset": "iso4217/USD",
+                      "description": "Invoice #BR1984",
+                      "display_id": "AB4JJP",
+                      "link": {
+                        "id": "link_RjF8vWwGc4JmJgchmf3Jr",
+                        "object": "link",
+                        "active": true,
+                        "after_completion": {
+                          "redirect_url": "null"
+                        },
+                        "amount": "19.99",
+                        "asset": "iso4217/USD",
+                        "restrictions": {
+                          "chains": []
+                        },
+                        "reusable": false,
+                        "suggested_apps": [],
+                        "test_mode": false,
+                        "theme": {},
+                        "type": "pay",
+                        "url": "https://pay.flexa.co/M8jw5PMX",
+                        "created": 1520845080,
+                        "updated": 1520845080
+                      },
+                      "mid": "370748471846382",
+                      "status": "pending",
+                      "test_mode": false,
+                      "created": 1520845080,
+                      "updated": 1520845080
+                    },
+                    "type": "commerce_intent.created",
+                    "created": 1520845080
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/refunds": {
+      "post": {
+        "tags": [
+          "Refunds"
+        ],
+        "summary": "Create a Refund",
+        "description": "Creates a refund object.\n\nRefunds can be created to return the value of any successful commerce intent to the customer, and can be made for any amount, any number of times—as long as the total amount refunded for a given commerce intent does not exceed the amount originally paid by the customer.\n",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/FlexaVersion"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RefundCreateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "headers": {
+              "Flexa-Version": {
+                "$ref": "#/components/headers/Flexa-Version"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Refund"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          }
+        }
+      }
+    },
+    "/refunds/{id}": {
+      "get": {
+        "tags": [
+          "Refunds"
+        ],
+        "summary": "Retrieve a Refund",
+        "description": "Retrieves the details of a previously created refund.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/FlexaVersion"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "headers": {
+              "Flexa-Version": {
+                "$ref": "#/components/headers/Flexa-Version"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Refund"
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "parameters": {
+      "FlexaVersion": {
+        "in": "header",
+        "name": "Flexa-Version",
+        "description": "The API version to use for processing this request.",
+        "schema": {
+          "type": "string",
+          "example": "2025-12-18"
+        }
+      }
+    },
+    "headers": {
+      "Flexa-Version": {
+        "description": "The API version used to process this request.",
+        "schema": {
+          "type": "string",
+          "example": "2025-12-18"
+        }
+      }
+    },
+    "schemas": {
+      "Asset": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The [CAIP-19](https://chainagnostic.org/CAIPs/caip-19) ID of the asset. National currencies such as the United States dollar are identified using the prefix “iso4217/” and the 3-digit alphabetic code of [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).",
+            "example": "eip155:1/slip44:60"
+          },
+          "object": {
+            "type": "string",
+            "example": "asset"
+          },
+          "chain": {
+            "description": "A chain object including details of the chain on which this asset was issued. Not applicable to national currency assets.",
+            "$ref": "#/components/schemas/Chain"
+          },
+          "color": {
+            "type": "string",
+            "description": "A hexadecimal color that can be used for tinting any UI related to this asset.",
+            "example": "#5700ff"
+          },
+          "decimals": {
+            "type": "integer",
+            "description": "The number of decimal places used by this asset.",
+            "example": 18
+          },
+          "icon_url": {
+            "type": "string",
+            "description": "The URL for the asset's icon.",
+            "example": "https://flexa.media/assets/ether.svg"
+          },
+          "name": {
+            "type": "string",
+            "description": "The common name of the asset.",
+            "example": "Ether"
+          },
+          "namespace": {
+            "type": "string",
+            "description": "The [CAIP namespace](https://namespaces.chainagnostic.org) of the asset.",
+            "example": "eip155"
+          },
+          "profile": {
+            "type": "string",
+            "description": "The ID of the asset profile for this asset.",
+            "example": "assetpf_f5q8f4J97jcxPW5Fwwv6g"
+          },
+          "symbol": {
+            "type": "string",
+            "description": "The common trading symbol of the asset.",
+            "example": "ETH"
+          },
+          "test_mode": {
+            "type": "boolean",
+            "description": "Whether this asset is valueless and thus available in test mode (true) or live mode where it can be used to exchange real value (false).",
+            "example": false
+          },
+          "created": {
+            "type": "integer",
+            "description": "The time at which this asset was enabled on Flexa, in non-leap seconds since the Unix epoch.",
+            "example": 1520845080
+          },
+          "updated": {
+            "type": "integer",
+            "description": "The time at which Flexa’s information about this asset was last updated, in non-leap seconds since the Unix epoch.",
+            "example": 1520845080
+          }
+        }
+      },
+      "Chain": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The [CAIP-2](https://chainagnostic.org/CAIPs/caip-2) ID of the chain.",
+            "example": "eip155:1"
+          },
+          "object": {
+            "type": "string",
+            "example": "chain"
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the chain.",
+            "example": "Ethereum"
+          },
+          "namespace": {
+            "type": "string",
+            "description": "The [CAIP namespace](https://namespaces.chainagnostic.org) of the chain.",
+            "example": "eip155"
+          },
+          "native_asset": {
+            "type": "string",
+            "description": "The chain's native asset, specified as a [CAIP-19](https://chainagnostic.org/CAIPs/caip-19) ID.",
+            "example": "eip155:1/slip44:60"
+          },
+          "network": {
+            "type": "string",
+            "description": "The ID of the network to which this chain is associated.",
+            "example": "netwrk_7cM535QGJMQ5F6Q5xW4Jh"
+          },
+          "test_network": {
+            "type": "boolean",
+            "description": "Whether this chain serves as a test network on which developers can make valueless transactions.",
+            "example": false
+          },
+          "created": {
+            "type": "integer",
+            "description": "The time at which this chain was enabled on Flexa, in non-leap seconds since the Unix epoch.",
+            "example": 1520845080
+          },
+          "updated": {
+            "type": "integer",
+            "description": "The time at which Flexa’s information about this chain was last updated, in non-leap seconds since the Unix epoch.",
+            "example": 1520845080
+          }
+        }
+      },
+      "CommerceIntent": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "A unique identifier for the object.",
+            "example": "ci_8wqPG5gM8vQxF4PCP8mp8"
+          },
+          "object": {
+            "type": "string",
+            "example": "commerce_intent"
+          },
+          "amount": {
+            "type": "string",
+            "description": "The amount intended to be collected from the customer, formatted according to the asset of the commerce intent.",
+            "example": "19.99"
+          },
+          "amount_capturable": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The total amount that can be captured from the customer using this commerce intent.",
+            "example": null
+          },
+          "amount_received": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The total amount that has been received from the customer using this commerce intent.",
+            "example": null
+          },
+          "asset": {
+            "type": "string",
+            "description": "The unit of account for this commerce intent. Used to calculate the exchange rate for payments and refunds.",
+            "example": "iso4217/USD"
+          },
+          "description": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "An internal field for storing additional context about this commerce intent. Not shown to customers.",
+            "example": "Invoice #BR1984"
+          },
+          "display_id": {
+            "type": "string",
+            "description": "A unique, customer-facing identifier for this commerce intent, which can be useful for quickly tracking down the commerce intent that's associated with a specific payment or refund. Shown to customers in apps and receipts.",
+            "example": "AB4JJP"
+          },
+          "link": {
+            "description": "A link object that details the one-time–use payment link that can be shared with customers to pay this commerce intent.",
+            "$ref": "#/components/schemas/Link"
+          },
+          "mid": {
+            "type": "string",
+            "description": "The MID used for processing this commerce intent.",
+            "example": "370748471846382"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "succeeded",
+              "canceled"
+            ],
+            "description": "The current status of this commerce intent with respect to the customer and their funds.",
+            "example": "pending"
+          },
+          "test_mode": {
+            "type": "boolean",
+            "description": "Whether this commerce intent was created with a test API key and thus may be paid with valueless, test mode assets (true) or a live API key and therefore must be paid using live mode assets with real value (false).",
+            "example": false
+          },
+          "created": {
+            "type": "integer",
+            "description": "The time at which this commerce intent was created, in non-leap seconds since the Unix epoch.",
+            "example": 1520845080
+          },
+          "updated": {
+            "type": "integer",
+            "description": "The time at which this commerce intent was last updated, in non-leap seconds since the Unix epoch.",
+            "example": 1520845080
+          }
+        }
+      },
+      "CommerceIntentCreateRequest": {
+        "type": "object",
+        "required": [
+          "amount"
+        ],
+        "properties": {
+          "amount": {
+            "type": "string",
+            "description": "The amount to collect from the customer. The minimum amount that can be collected is the smallest decimal unit of the `asset` (e.g., $0.01 for `iso4217/USD`).",
+            "example": "19.99"
+          },
+          "asset": {
+            "type": "string",
+            "description": "The unit of account to use for this commerce intent (i.e., the currency used to display the sale price to the customer). Used to calculate the exchange rate for payments and refunds. Defaults to the business's unit of account (or the MID's unit of account, if configured)."
+          },
+          "authorization": {
+            "type": "object",
+            "description": "Relevant data for authorizing this commerce intent in person when scanning barcode data from a customer-presented device. Should not be provided when creating an open-ended commerce intent that will be completed via a payment link.",
+            "properties": {
+              "number": {
+                "type": "string",
+                "description": "The numeric string collected from a customer-presented device (e.g., a smartphone) by a barcode scanner when accepting payments in person. Begins with `84` for customers using &ldquo;Pay with Flexa.&rdquo;",
+                "example": "8412345678901337"
+              }
+            }
+          },
+          "capture_method": {
+            "type": "string",
+            "enum": [
+              "automatic"
+            ],
+            "description": "The method to use for capturing this payment from the customer: `automatic` (the commerce intent is immediately captured upon authorization). Defaults to `automatic`."
+          },
+          "description": {
+            "type": "string",
+            "description": "Optional internal field for storing additional context about this commerce intent. Not shown to customers."
+          },
+          "link": {
+            "type": "object",
+            "description": "Optional parameters for customizing the behavior of this commerce intent's automatically generated payment link. Not applicable to commerce intents created using customer-presented `authorization` data.",
+            "properties": {
+              "after_completion": {
+                "type": "object",
+                "description": "Optional parameters for actions to be taken after the link’s commerce intent is successfully completed.",
+                "properties": {
+                  "redirect_url": {
+                    "type": "string",
+                    "description": "The URL to which the customer will be redirected after a commerce intent is successfully completed. Useful for attributing a commerce intent to a specific cart or checkout flow."
+                  }
+                }
+              },
+              "restrictions": {
+                "type": "object",
+                "description": "A set of parameters that can be used to restrict the ways in which customers can interact with this commerce intent.",
+                "properties": {
+                  "chains": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "The set of chains, specified as [CAIP-2](https://chainagnostic.org/CAIPs/caip-2) IDs, that the customer will be limited to using when interacting with this commerce intent. If empty, all chains will be made available.",
+                    "example": []
+                  }
+                }
+              }
+            }
+          },
+          "mid": {
+            "type": "string",
+            "description": "The MID to use for processing this commerce intent. Only required for teams with access to multiple MIDs."
+          }
+        }
+      },
+      "Event": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "A unique identifier for the object.",
+            "example": "event_FQVccxrX3RgJ9X5q94Cp9"
+          },
+          "object": {
+            "type": "string",
+            "example": "event"
+          },
+          "api_version": {
+            "type": "string",
+            "description": "The version of the API corresponding to the shape of the event's subject.",
+            "example": "2025-12-18"
+          },
+          "data": {
+            "type": "object",
+            "description": "The subject of the event as recorded at the time the event occurred."
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "commerce_intent.created",
+              "commerce_intent.succeeded",
+              "commerce_intent.canceled"
+            ],
+            "description": "The type of event that was recorded.",
+            "example": "commerce_intent.created"
+          },
+          "created": {
+            "type": "integer",
+            "description": "The time at which the event occurred, in non-leap seconds since the Unix epoch.",
+            "example": 1520845080
+          }
+        }
+      },
+      "Link": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "A unique identifier for the object.",
+            "example": "link_RjF8vWwGc4JmJgchmf3Jr"
+          },
+          "object": {
+            "type": "string",
+            "example": "link"
+          },
+          "active": {
+            "type": "boolean",
+            "description": "Whether the link can be accessed by customers",
+            "example": true
+          },
+          "after_completion": {
+            "type": "object",
+            "description": "Actions to be taken after the link’s corresponding commerce intent is successfully completed.",
+            "properties": {
+              "redirect_url": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "The URL to which customers will be redirected after the commerce intent is successfully completed.",
+                "example": null
+              }
+            }
+          },
+          "amount": {
+            "type": "string",
+            "description": "The amount intended to be collected from the customer, formatted according to the asset of the link.",
+            "example": "19.99"
+          },
+          "asset": {
+            "type": "string",
+            "description": "The unit of account for this link.",
+            "example": "iso4217/USD"
+          },
+          "restrictions": {
+            "type": "object",
+            "description": "A set of parameters limiting the ways in which Flexa will enable customers to interact with this commerce intent.",
+            "properties": {
+              "chains": {
+                "type": "array",
+                "description": "The set of chains, as [CAIP-2](https://chainagnostic.org/CAIPs/caip-2) IDs, that the customer will be limited to using when interacting with this commerce intent.",
+                "items": {
+                  "type": "string"
+                },
+                "example": []
+              }
+            }
+          },
+          "reusable": {
+            "type": "boolean",
+            "description": "Whether this link can be reused to pay multiple commerce intents.",
+            "example": false
+          },
+          "suggested_apps": {
+            "type": "array",
+            "description": "The set of apps that will be suggested to the customer.",
+            "items": {
+              "type": "string"
+            },
+            "example": []
+          },
+          "test_mode": {
+            "type": "boolean",
+            "description": "Whether this link was created with a test API key and thus may be paid with valueless, test mode assets (true) or a live API key and therefore must be paid using live mode assets with real value (false).",
+            "example": false
+          },
+          "theme": {
+            "type": "object",
+            "description": "Theming for the link.",
+            "example": {}
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "pay"
+            ],
+            "description": "The type of link.",
+            "example": "pay"
+          },
+          "url": {
+            "type": "string",
+            "description": "The URL of the link, for presenting to customers.",
+            "example": "https://pay.flexa.co/M8jw5PMX"
+          },
+          "created": {
+            "type": "integer",
+            "description": "The time at which this link was created, in non-leap seconds since the Unix epoch.",
+            "example": 1520845080
+          },
+          "updated": {
+            "type": "integer",
+            "description": "The time at which this link was last updated, in non-leap seconds since the Unix epoch.",
+            "example": 1520845080
+          }
+        }
+      },
+      "Refund": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "A unique identifier for the object.",
+            "example": "refund_WJqQ2wFX7phhXM2RXmmgP"
+          },
+          "object": {
+            "type": "string",
+            "example": "refund"
+          },
+          "amount": {
+            "type": "string",
+            "description": "The amount refunded to the customer, formatted according to the refund asset.",
+            "example": "10.50"
+          },
+          "asset": {
+            "type": "string",
+            "description": "The unit of account for this refund. Always the same as the related commerce intent.",
+            "example": "iso4217/USD"
+          },
+          "commerce_intent": {
+            "type": "string",
+            "description": "The ID of the commerce intent for which this refund was created.",
+            "example": "ci_cCHGVMpPXQ47wWpRG7X54"
+          },
+          "reason": {
+            "type": "string",
+            "enum": [
+              "customer_request",
+              "duplicate",
+              "return"
+            ],
+            "description": "The reason this refund was issued.",
+            "example": "return"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "succeeded"
+            ],
+            "description": "The current status of this refund.",
+            "example": "succeeded"
+          },
+          "created": {
+            "type": "integer",
+            "description": "The time at which this refund was created, in non-leap seconds since the Unix epoch.",
+            "example": 1520845080
+          },
+          "updated": {
+            "type": "integer",
+            "description": "The time at which this refund was last updated, in non-leap seconds since the Unix epoch.",
+            "example": 1520845080
+          }
+        }
+      },
+      "RefundCreateRequest": {
+        "type": "object",
+        "required": [
+          "amount",
+          "commerce_intent"
+        ],
+        "properties": {
+          "amount": {
+            "type": "string",
+            "description": "The amount to refund to the customer.",
+            "example": "10.50"
+          },
+          "commerce_intent": {
+            "type": "string",
+            "description": "The ID of the commerce intent to refund.",
+            "example": "ci_cCHGVMpPXQ47wWpRG7X54"
+          },
+          "reason": {
+            "type": "string",
+            "enum": [
+              "customer_request",
+              "duplicate",
+              "return"
+            ],
+            "description": "The reason for the return.",
+            "example": "return"
+          }
+        }
+      },
+      "Collection": {
+        "description": "A collection",
+        "type": "object",
+        "properties": {
+          "object": {
+            "type": "string",
+            "example": "collection"
+          },
+          "url": {
+            "type": "string"
+          },
+          "has_more": {
+            "type": "boolean",
+            "example": true
+          }
+        }
+      },
+      "BadRequestError": {
+        "x-scalar-ignore": true,
+        "description": "RFC 7807 (https://datatracker.ietf.org/doc/html/rfc7807)",
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "examples": [
+              "https://example.com/errors/bad-request"
+            ]
+          },
+          "title": {
+            "type": "string",
+            "examples": [
+              "Bad Request"
+            ]
+          },
+          "status": {
+            "type": "integer",
+            "format": "int64",
+            "examples": [
+              400
+            ]
+          },
+          "detail": {
+            "type": "string",
+            "examples": [
+              "The request was invalid."
+            ]
+          }
+        }
+      },
+      "ForbiddenError": {
+        "x-scalar-ignore": true,
+        "description": "RFC 7807 (https://datatracker.ietf.org/doc/html/rfc7807)",
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "examples": [
+              "https://example.com/errors/forbidden"
+            ]
+          },
+          "title": {
+            "type": "string",
+            "examples": [
+              "Forbidden"
+            ]
+          },
+          "status": {
+            "type": "integer",
+            "format": "int64",
+            "examples": [
+              403
+            ]
+          },
+          "detail": {
+            "type": "string",
+            "examples": [
+              "You are not authorized to access this resource."
+            ]
+          }
+        }
+      },
+      "NotFoundError": {
+        "x-scalar-ignore": true,
+        "description": "RFC 7807 (https://datatracker.ietf.org/doc/html/rfc7807)",
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "examples": [
+              "https://example.com/errors/not-found"
+            ]
+          },
+          "title": {
+            "type": "string",
+            "examples": [
+              "Not Found"
+            ]
+          },
+          "status": {
+            "type": "integer",
+            "format": "int64",
+            "examples": [
+              404
+            ]
+          },
+          "detail": {
+            "type": "string",
+            "examples": [
+              "The resource you are trying to access does not exist."
+            ]
+          }
+        }
+      },
+      "UnauthorizedError": {
+        "x-scalar-ignore": true,
+        "description": "RFC 7807 (https://datatracker.ietf.org/doc/html/rfc7807)",
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "examples": [
+              "https://example.com/errors/not-found"
+            ]
+          },
+          "title": {
+            "type": "string",
+            "examples": [
+              "Unauthorized"
+            ]
+          },
+          "status": {
+            "type": "integer",
+            "format": "int64",
+            "examples": [
+              401
+            ]
+          },
+          "detail": {
+            "type": "string",
+            "examples": [
+              "You are not authorized to access this resource."
+            ]
+          }
+        }
+      },
+      "Conflict": {
+        "x-scalar-ignore": true,
+        "description": "RFC 7807 (https://datatracker.ietf.org/doc/html/rfc7807)",
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "examples": [
+              "https://example.com/errors/conflict"
+            ]
+          },
+          "title": {
+            "type": "string",
+            "examples": [
+              "Conflict"
+            ]
+          },
+          "status": {
+            "type": "integer",
+            "format": "int64",
+            "examples": [
+              409
+            ]
+          },
+          "detail": {
+            "type": "string",
+            "examples": [
+              "The resource you are trying to access is in conflict."
+            ]
+          }
+        }
+      },
+      "UnprocessableEntity": {
+        "x-scalar-ignore": true,
+        "description": "RFC 7807 (https://datatracker.ietf.org/doc/html/rfc7807)",
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "examples": [
+              "https://example.com/errors/unprocessable-entity"
+            ]
+          },
+          "title": {
+            "type": "string",
+            "examples": [
+              "Unprocessable Entity"
+            ]
+          },
+          "status": {
+            "type": "integer",
+            "format": "int64",
+            "examples": [
+              422
+            ]
+          },
+          "detail": {
+            "type": "string",
+            "examples": [
+              "The request was invalid."
+            ]
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "BasicAuth": {
+        "type": "http",
+        "scheme": "basic",
+        "description": "Basic HTTP authentication"
+      }
+    },
+    "responses": {
+      "BadRequest": {
+        "description": "Bad Request",
+        "headers": {
+          "Flexa-Version": {
+            "$ref": "#/components/headers/Flexa-Version"
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/BadRequestError"
+            }
+          }
+        }
+      },
+      "Forbidden": {
+        "description": "Forbidden",
+        "headers": {
+          "Flexa-Version": {
+            "$ref": "#/components/headers/Flexa-Version"
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ForbiddenError"
+            }
+          }
+        }
+      },
+      "NotFound": {
+        "description": "Not Found",
+        "headers": {
+          "Flexa-Version": {
+            "$ref": "#/components/headers/Flexa-Version"
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/NotFoundError"
+            }
+          }
+        }
+      },
+      "Unauthorized": {
+        "description": "Unauthorized",
+        "headers": {
+          "Flexa-Version": {
+            "$ref": "#/components/headers/Flexa-Version"
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UnauthorizedError"
+            }
+          }
+        }
+      },
+      "Conflict": {
+        "description": "Conflict",
+        "headers": {
+          "Flexa-Version": {
+            "$ref": "#/components/headers/Flexa-Version"
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Conflict"
+            }
+          }
+        }
+      },
+      "UnprocessableEntity": {
+        "description": "Unprocessable Entity",
+        "headers": {
+          "Flexa-Version": {
+            "$ref": "#/components/headers/Flexa-Version"
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UnprocessableEntity"
+            }
+          }
+        }
+      }
+    }
+  },
+  "x-ext-urls": {}
+}

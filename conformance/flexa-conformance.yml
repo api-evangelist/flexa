@@ -1,0 +1,26 @@
+generated: '2026-07-19'
+method: derived
+source: openapi/flexa-openapi.json
+standards:
+- id: http-basic-auth
+  conforms: true
+  evidence: openapi securityScheme type http scheme basic (RFC 7617)
+- id: rfc7807-problem-details
+  conforms: true
+  evidence: error schemas (BadRequestError, ForbiddenError, NotFoundError, UnauthorizedError, Conflict, UnprocessableEntity) declare RFC 7807 problem-details shape (type/title/status/detail)
+- id: openapi-3.1
+  conforms: true
+  evidence: document declares openapi 3.1.1
+- id: caip-asset-identifiers
+  conforms: true
+  evidence: assets identified with CAIP-style chain/asset paths (e.g. assets/iso4217/usd)
+- id: oauth2
+  conforms: false
+  evidence: no oauth2 securityScheme; API keys via HTTP Basic only
+- id: oidc
+  conforms: false
+- id: rfc9457-problem-details
+  conforms: partial
+  evidence: uses RFC 7807 (the predecessor of RFC 9457); envelope is field-compatible
+- id: json-api
+  conforms: false

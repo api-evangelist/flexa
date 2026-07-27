@@ -1,0 +1,22 @@
+generated: '2026-07-19'
+method: generated
+source: openapi/flexa-openapi.json
+note: >-
+  The Flexa OpenAPI operations do not declare operationIds; skill steps are
+  grounded in the real HTTP method + path of each operation (verified present in
+  openapi/flexa-openapi.json). No operations were invented.
+skills:
+- file: flexa-collect-a-payment.md
+  name: Collect a digital-currency payment
+  api: openapi/flexa-openapi.json
+  operations:
+  - "POST /commerce_intents"
+  - "GET /commerce_intents/{id}"
+  - "GET /events"
+- file: flexa-refund-a-payment.md
+  name: Refund a completed payment
+  api: openapi/flexa-openapi.json
+  operations:
+  - "POST /refunds"
+  - "GET /refunds/{id}"
+  - "GET /commerce_intents/{id}"

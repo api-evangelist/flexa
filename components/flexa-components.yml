@@ -1,0 +1,25 @@
+generated: '2026-07-19'
+method: searched
+source: https://flexa.co/components
+summary: >-
+  Flexa Components are prebuilt, embeddable wallet-integration UI surfaces that
+  let a wallet or app add Flexa Payments with native mobile UI. Distinct from the
+  server-side API — these are client-side embed libraries.
+families:
+- name: Flexa Components (Spend)
+  description: Prebuilt mobile payment UI for wallet apps to let users pay merchants with digital assets.
+  platforms:
+  - platform: iOS
+    library: flexa-ios (Swift Package Manager)
+    repo: https://github.com/flexa/flexa-ios
+  - platform: Android
+    library: "co.flexa:core / co.flexa:spend (Maven Central)"
+    repo: https://github.com/flexa/flexa-android
+  - platform: React Native
+    library: "@flexa/flexa-react-native (npm)"
+    repo: https://github.com/flexa/flexa-react-native
+hosted_surfaces:
+- name: Hosted payment links
+  description: Flexa-hosted commerce pages served at pay.flexa.co (created via the Link resource).
+  url: https://pay.flexa.co
+ref_packages: packages/flexa-packages.yml

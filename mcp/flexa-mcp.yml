@@ -1,0 +1,39 @@
+generated: '2026-07-19'
+method: derived
+status: candidate
+source: openapi/flexa-openapi.json
+note: >-
+  No official hosted/remote Flexa MCP server was found (no listing in docs, npm
+  @modelcontextprotocol, or public MCP registries as of the enrichment date).
+  This is a candidate tool surface derived one-to-one from the Flexa OpenAPI
+  operations. Operations lack operationIds in the source spec, so tools are keyed
+  by HTTP method + path.
+server:
+  name: flexa
+  transport: http
+  url: null
+tools:
+- name: list_assets
+  description: List the assets (national and digital currencies) supported by Flexa.
+  source_operation: "openapi/flexa-openapi.json#GET /assets"
+- name: get_asset
+  description: Retrieve a single asset by id.
+  source_operation: "openapi/flexa-openapi.json#GET /assets/{id}"
+- name: create_commerce_intent
+  description: Create a commerce intent to collect a digital-currency payment.
+  source_operation: "openapi/flexa-openapi.json#POST /commerce_intents"
+- name: get_commerce_intent
+  description: Retrieve a commerce intent by id.
+  source_operation: "openapi/flexa-openapi.json#GET /commerce_intents/{id}"
+- name: cancel_commerce_intent
+  description: Cancel a commerce intent.
+  source_operation: "openapi/flexa-openapi.json#POST /commerce_intents/{id}/cancel"
+- name: list_events
+  description: List events (e.g. commerce_intent.created / succeeded / canceled).
+  source_operation: "openapi/flexa-openapi.json#GET /events"
+- name: create_refund
+  description: Create a refund against a completed commerce intent.
+  source_operation: "openapi/flexa-openapi.json#POST /refunds"
+- name: get_refund
+  description: Retrieve a refund by id.
+  source_operation: "openapi/flexa-openapi.json#GET /refunds/{id}"

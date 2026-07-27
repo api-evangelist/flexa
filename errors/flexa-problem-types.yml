@@ -1,0 +1,49 @@
+generated: '2026-07-19'
+method: derived
+source: openapi/flexa-openapi.json
+format: rfc7807
+envelope:
+  media_type: application/json
+  fields: [type, title, status, detail]
+  note: >-
+    Flexa error responses follow RFC 7807 (Problem Details for HTTP APIs) with
+    a machine-readable type URI, a human-readable title, the HTTP status, and a
+    detail message. (The OpenAPI schemas cite RFC 7807, the predecessor of the
+    updated RFC 9457.)
+problems:
+- status: 400
+  schema: BadRequestError
+  title: Bad Request
+  detail: The request was invalid.
+  source_operations:
+  - "openapi/flexa-openapi.json#POST /commerce_intents"
+  - "openapi/flexa-openapi.json#POST /refunds"
+- status: 401
+  schema: UnauthorizedError
+  title: Unauthorized
+  detail: You are not authorized to access this resource.
+  remediation: Provide a valid API key via HTTP Basic Authentication (key as username).
+- status: 403
+  schema: ForbiddenError
+  title: Forbidden
+  detail: You are not authorized to access this resource.
+  source_operations:
+  - "openapi/flexa-openapi.json#POST /commerce_intents"
+  - "openapi/flexa-openapi.json#POST /commerce_intents/{id}/cancel"
+  - "openapi/flexa-openapi.json#POST /refunds"
+- status: 404
+  schema: NotFoundError
+  title: Not Found
+  detail: The resource you are trying to access does not exist.
+  source_operations:
+  - "openapi/flexa-openapi.json#GET /assets/{id}"
+  - "openapi/flexa-openapi.json#GET /commerce_intents/{id}"
+  - "openapi/flexa-openapi.json#GET /refunds/{id}"
+- status: 409
+  schema: Conflict
+  title: Conflict
+  detail: The resource you are trying to access is in conflict.
+- status: 422
+  schema: UnprocessableEntity
+  title: Unprocessable Entity
+  detail: The request was invalid.

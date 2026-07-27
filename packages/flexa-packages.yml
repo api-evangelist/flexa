@@ -1,0 +1,40 @@
+generated: '2026-07-19'
+method: searched
+source: https://docs.flexa.co/introduction
+note: >-
+  Flexa's first-party SDKs are the prebuilt "Flexa Components" wallet UI
+  libraries for iOS, Android, and React Native. They are client-side embed
+  libraries (see components/flexa-components.yml) distributed via standard
+  package registries.
+packages:
+- language: javascript
+  registry: npm
+  name: "@flexa/flexa-react-native"
+  version: 1.0.17
+  url: https://www.npmjs.com/package/@flexa/flexa-react-native
+  install: npm install @flexa/flexa-react-native
+  repo: https://github.com/flexa/flexa-react-native
+  official: true
+- language: swift
+  registry: swift-package-manager
+  name: flexa-ios
+  url: https://github.com/flexa/flexa-ios
+  install: "Add https://github.com/flexa/flexa-ios via Swift Package Manager"
+  repo: https://github.com/flexa/flexa-ios
+  official: true
+- language: kotlin
+  registry: maven-central
+  name: co.flexa:core
+  version: 1.1.3
+  url: https://central.sonatype.com/artifact/co.flexa/core
+  install: "implementation 'co.flexa:core:1.1.3'"
+  repo: https://github.com/flexa/flexa-android
+  official: true
+- language: kotlin
+  registry: maven-central
+  name: co.flexa:spend
+  version: 1.1.3
+  url: https://central.sonatype.com/artifact/co.flexa/spend
+  install: "implementation 'co.flexa:spend:1.1.3'"
+  repo: https://github.com/flexa/flexa-android
+  official: true

@@ -1,0 +1,29 @@
+generated: '2026-07-19'
+method: searched
+source: openapi/flexa-openapi.json
+type: Webhooks
+summary: >-
+  Flexa exposes an event surface: an Event object records state changes and is
+  retrievable via the /events list endpoint. Each event carries an api_version
+  (the shape of the subject at emission time), a type, and a data payload (the
+  subject as recorded when the event occurred).
+retrieval:
+  list_operation: "openapi/flexa-openapi.json#GET /events"
+  filter: types (query parameter) to filter by event type
+  envelope: Collection wrapper (object, url, has_more)
+event_object:
+  fields: [id, object, api_version, data, type, created]
+  id_prefix: event_
+event_types:
+- name: commerce_intent.created
+  subject: commerce_intent
+  description: A commerce intent was created.
+- name: commerce_intent.succeeded
+  subject: commerce_intent
+  description: A commerce intent was fulfilled (payment completed).
+- name: commerce_intent.canceled
+  subject: commerce_intent
+  description: A commerce intent was canceled.
+notes:
+- Event types are enumerated in the OpenAPI Event schema.
+- No standalone AsyncAPI document is published by Flexa; the event catalog is captured here (type Webhooks), not fabricated as AsyncAPI.

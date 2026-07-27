@@ -1,0 +1,61 @@
+generated: '2026-07-19'
+method: derived
+source: openapi/flexa-openapi.json
+entities:
+- name: CommerceIntent
+  object: commerce_intent
+  id_prefix: ci_
+  description: A single attempt to collect a digital-currency payment from a customer.
+- name: Refund
+  object: refund
+  id_prefix: refund_
+  description: A return of value against a completed commerce intent.
+- name: Link
+  object: link
+  id_prefix: link_
+  description: A shareable hosted payment link (pay.flexa.co) that creates commerce intents.
+- name: Asset
+  object: asset
+  id_prefix: "eip155:*/slip44:* (CAIP)"
+  description: A national or digital currency that flows through the Flexa platform.
+- name: Chain
+  object: chain
+  id_prefix: "eip155:* (CAIP)"
+  description: A blockchain network on which assets exist.
+- name: Event
+  object: event
+  id_prefix: event_
+  description: An immutable record of a state change (e.g. commerce_intent.created).
+relationships:
+- from: Refund
+  to: CommerceIntent
+  kind: belongs_to
+  via: commerce_intent
+- from: CommerceIntent
+  to: Link
+  kind: has_one
+  via: link
+- from: CommerceIntent
+  to: Asset
+  kind: belongs_to
+  via: asset
+- from: Refund
+  to: Asset
+  kind: belongs_to
+  via: asset
+- from: Link
+  to: Asset
+  kind: belongs_to
+  via: asset
+- from: Asset
+  to: Chain
+  kind: belongs_to
+  via: chain
+- from: Event
+  to: CommerceIntent
+  kind: references
+  via: data (subject of commerce_intent.* events)
+notes:
+- Amounts are string-encoded decimals; timestamps (created/updated) are Unix epoch integers.
+- Assets and chains use CAIP-style identifiers (e.g. eip155:1 for Ethereum mainnet, eip155:1/slip44:60 for Ether).
+- Every top-level object carries an "object" discriminator and a test_mode flag.

@@ -1,0 +1,22 @@
+generated: '2026-07-19'
+method: searched
+source: https://docs.flexa.co/api-reference/introduction
+versioning:
+  scheme: date-based
+  current: '2025-12-18'
+  docs: https://docs.flexa.co/api-reference/introduction
+  note: >-
+    The Flexa API is versioned by calendar date (info.version 2025-12-18). Event
+    objects carry an api_version field recording the shape of the event subject
+    at the time it occurred.
+deprecation:
+  policy_url: null
+  sunset_header: unknown
+  note: No published deprecation policy or RFC 8594 Sunset/Deprecation header support was found.
+sla:
+  url: null
+status_page: null
+deprecated_operations: []
+notes:
+- No public status page was reachable at status.flexa.co / status.flexa.network at probe time.
+- Live API keys only activate after business approval; test keys are usable immediately.

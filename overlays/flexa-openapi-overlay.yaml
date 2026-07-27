@@ -1,0 +1,25 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Flexa API
+  version: 1.0.0
+extends: openapi/flexa-openapi.json
+actions:
+- target: $.info
+  update:
+    x-apievangelist-enriched: '2026-07-19'
+    x-apievangelist-auth: HTTP Basic Authentication with API key as username
+    x-apievangelist-error-format: rfc7807
+    x-apievangelist-versioning: date-based (2025-12-18)
+- target: $.info
+  update:
+    x-apievangelist-sandbox: test mode via publishable_test_/secret_test_ keys and Flexa Credit (CR)
+    x-apievangelist-event-types:
+    - commerce_intent.created
+    - commerce_intent.succeeded
+    - commerce_intent.canceled
+- target: "$.paths['/commerce_intents']['post']"
+  update:
+    x-apievangelist-note: Core payment-collection operation; create a commerce intent to collect a digital-currency payment.
+- target: "$.paths['/refunds']['post']"
+  update:
+    x-apievangelist-note: Refund value against a completed commerce intent (via the commerce_intent id).

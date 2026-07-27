@@ -1,8 +1,31 @@
 aid: flexa
 name: Flexa
-description: 'Flexa is a company surfaced as a portfolio company of pantera-capital and added to the API
-  Evangelist network as a stub for enrichment. Sector: crypto. This profile is a lead awaiting the enrichment
-  pipeline.'
+description: >-
+  Flexa is a digital-currency payments network that lets businesses accept
+  crypto and other digital assets from customers anywhere, with instant
+  authorization, fraud-resistant settlement, and automatic conversion into a
+  preferred payout currency so merchants avoid price volatility. The Flexa
+  Payments API is built around the "commerce intent" resource, which represents
+  any attempt to collect a digital-currency payment and tracks requested debits
+  against actual credits; supporting resources include assets, refunds, events,
+  links, brands, and flexcodes. Flexa ships prebuilt mobile UI Components for
+  iOS, Android, and React Native, plus in-person (Point of Sale) and online
+  acceptance options, and a production-grade test mode that uses a valueless
+  ERC-20 "Credit" (CR) token. Flexa is backed by Pantera Capital and supports
+  99+ digital assets across Ethereum, Bitcoin, Lightning, Solana, and more.
+accessModel:
+  pricing: unknown
+  onboarding: self-serve
+  trial: false
+  try_now: false
+  public: false
+  label: Self-serve signup
+  confidence: medium
+  source:
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://framerusercontent.com/assets/GHzfAvG7SahlNocEC2Agsubvp0.png
 url: https://raw.githubusercontent.com/api-evangelist/flexa/refs/heads/main/apis.yml
 x-type: company
 x-source: vc-portfolio
@@ -12,16 +35,227 @@ x-tier: stub
 x-tier-reason: portfolio-lead
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-17'
+modified: '2026-07-19'
 tags:
 - Company
 - Crypto
-apis: []
+- Payments
+- Digital Currency
+- Cryptocurrency
+- Fintech
+- Blockchain
+- Merchant Payments
+- Web3
+apis:
+- aid: flexa:flexa-assets-api
+  name: Flexa Assets API
+  description: >-
+    Assets encompass all the value that flows through the Flexa platform. In the Flexa API, both national
+    currencies (“fiat“) and digital currencies (“crypto“ or “digital assets“) are returned together in
+    one collection.
+
+
+    The Flexa API uses [CAIP](https://chainagnostic.org/CAIPs/caip-19)-style IDs for all assets. National
+    currency asset IDs are all prefixed with “iso4217/” and use [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217)
+    3-digit alphabetic codes. For example, ether on Ethereum mainnet is `eip155:1/slip44:60`, and the
+    Canadian dollar is `iso4217/CAD`.
+  humanURL: https://docs.flexa.co/introduction
+  baseURL: https://api.flexa.co
+  tags:
+  - Assets
+  properties:
+  - type: OpenAPI
+    url: openapi/flexa-assets-api-openapi.yml
+  - type: Documentation
+    url: https://docs.flexa.co/introduction
+  - type: APIReference
+    url: https://docs.flexa.co/api-reference/introduction
+  - type: GettingStarted
+    url: https://docs.flexa.co/payments/getting-started
+  - type: Authentication
+    url: authentication/flexa-authentication.yml
+  - type: Sandbox
+    url: sandbox/flexa-sandbox.yml
+  - type: ErrorCatalog
+    url: errors/flexa-problem-types.yml
+  - type: Conventions
+    url: conventions/flexa-conventions.yml
+  - type: DataModel
+    url: data-model/flexa-data-model.yml
+  - type: Webhooks
+    url: asyncapi/flexa-events-webhooks.yml
+  - type: Conformance
+    url: conformance/flexa-conformance.yml
+- aid: flexa:flexa-commerce-intents-api
+  name: Flexa Commerce Intents API
+  description: >-
+    Commerce intents offer a versatile way to process digital asset payments from your customers using
+    any sales channel.
+  humanURL: https://docs.flexa.co/introduction
+  baseURL: https://api.flexa.co
+  tags:
+  - Commerce Intents
+  properties:
+  - type: OpenAPI
+    url: openapi/flexa-commerce-intents-api-openapi.yml
+  - type: Documentation
+    url: https://docs.flexa.co/introduction
+  - type: APIReference
+    url: https://docs.flexa.co/api-reference/introduction
+  - type: GettingStarted
+    url: https://docs.flexa.co/payments/getting-started
+  - type: Authentication
+    url: authentication/flexa-authentication.yml
+  - type: Sandbox
+    url: sandbox/flexa-sandbox.yml
+  - type: ErrorCatalog
+    url: errors/flexa-problem-types.yml
+  - type: Conventions
+    url: conventions/flexa-conventions.yml
+  - type: DataModel
+    url: data-model/flexa-data-model.yml
+  - type: Webhooks
+    url: asyncapi/flexa-events-webhooks.yml
+  - type: Conformance
+    url: conformance/flexa-conformance.yml
+- aid: flexa:flexa-events-api
+  name: Flexa Events API
+  description: >-
+    Events are created when any of the core resources on the Flexa platform change in a meaningful way,
+    such as when a commerce intent succeeds or a digital asset transaction is requested. Clients subscribe
+    to a stream that is provided over [Server-Sent Events (SSE)](https://en.wikipedia.org/wiki/Server-sent_events).
+  humanURL: https://docs.flexa.co/introduction
+  baseURL: https://api.flexa.co
+  tags:
+  - Events
+  properties:
+  - type: OpenAPI
+    url: openapi/flexa-events-api-openapi.yml
+  - type: Documentation
+    url: https://docs.flexa.co/introduction
+  - type: APIReference
+    url: https://docs.flexa.co/api-reference/introduction
+  - type: GettingStarted
+    url: https://docs.flexa.co/payments/getting-started
+  - type: Authentication
+    url: authentication/flexa-authentication.yml
+  - type: Sandbox
+    url: sandbox/flexa-sandbox.yml
+  - type: ErrorCatalog
+    url: errors/flexa-problem-types.yml
+  - type: Conventions
+    url: conventions/flexa-conventions.yml
+  - type: DataModel
+    url: data-model/flexa-data-model.yml
+  - type: Webhooks
+    url: asyncapi/flexa-events-webhooks.yml
+  - type: Conformance
+    url: conformance/flexa-conformance.yml
+- aid: flexa:flexa-refunds-api
+  name: Flexa Refunds API
+  description: >-
+    Refunds are the only way by which a Flexa payment can be reversed. Refunds are always initiated by
+    the recipient, and can be made for either a partial amount or the full value of the original payment.
+
+
+    Because Flexa supports payments using a wide variety of assets, including some that are highly price-volatile,
+    refunds are always processed using current exchange rates. For example, if a customer makes a payment
+    using bitcoin, and the commerce intent wasn’t denominated in bitcoin, the customer may not receive
+    a refund for the exact same amount of bitcoin that they originally paid. Instead, the payment amount
+    will be converted back into bitcoin using the market exchange rate before it’s refunded.
+  humanURL: https://docs.flexa.co/introduction
+  baseURL: https://api.flexa.co
+  tags:
+  - Refunds
+  properties:
+  - type: OpenAPI
+    url: openapi/flexa-refunds-api-openapi.yml
+  - type: Documentation
+    url: https://docs.flexa.co/introduction
+  - type: APIReference
+    url: https://docs.flexa.co/api-reference/introduction
+  - type: GettingStarted
+    url: https://docs.flexa.co/payments/getting-started
+  - type: Authentication
+    url: authentication/flexa-authentication.yml
+  - type: Sandbox
+    url: sandbox/flexa-sandbox.yml
+  - type: ErrorCatalog
+    url: errors/flexa-problem-types.yml
+  - type: Conventions
+    url: conventions/flexa-conventions.yml
+  - type: DataModel
+    url: data-model/flexa-data-model.yml
+  - type: Webhooks
+    url: asyncapi/flexa-events-webhooks.yml
+  - type: Conformance
+    url: conformance/flexa-conformance.yml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: AgenticAccess
+  url: agentic-access/flexa-agentic-access.yml
 - type: Website
-  url: https://flexa.network/
+  url: https://flexa.co/
+- type: DeveloperPortal
+  url: https://docs.flexa.co/introduction
+- type: Documentation
+  url: https://docs.flexa.co/introduction
+- type: APIReference
+  url: https://docs.flexa.co/api-reference/introduction
+- type: GettingStarted
+  url: https://docs.flexa.co/payments/getting-started
+- type: Support
+  url: https://support.flexa.co/en/
+- type: TermsOfService
+  url: https://flexa.co/legal/terms
+- type: PrivacyPolicy
+  url: https://flexa.co/legal/privacy
+- type: GitHubOrganization
+  url: https://github.com/flexa
+- type: LLMsTxt
+  url: llms/flexa-llms.txt
+- type: Packages
+  url: packages/flexa-packages.yml
+- type: SDKs
+  url: packages/flexa-packages.yml
+- type: Authentication
+  url: authentication/flexa-authentication.yml
+- type: Sandbox
+  url: sandbox/flexa-sandbox.yml
+- type: WellKnown
+  url: well-known/flexa-well-known.yml
+- type: DomainSecurity
+  url: security/flexa-domain-security.yml
+- type: VulnerabilityDisclosure
+  url: security/flexa-vulnerability-disclosure.yml
+- type: Security
+  url: https://flexa.co/security/bug-bounty-program
+- type: ErrorCatalog
+  url: errors/flexa-problem-types.yml
+- type: Conventions
+  url: conventions/flexa-conventions.yml
+- type: Lifecycle
+  url: lifecycle/flexa-lifecycle.yml
+- type: Conformance
+  url: conformance/flexa-conformance.yml
+- type: DataModel
+  url: data-model/flexa-data-model.yml
+- type: Overlay
+  url: overlays/flexa-openapi-overlay.yaml
+- type: MCPServer
+  url: mcp/flexa-mcp.yml
+- type: Webhooks
+  url: asyncapi/flexa-events-webhooks.yml
+- type: Components
+  url: components/flexa-components.yml
+- type: AgentSkill
+  url: skills/_index.yml
+x-enrichment:
+  date: '2026-07-19'
+  status: backfilled
+  pass: local-v1
+  note: backfilled from .gitignore signal + verified work evidence

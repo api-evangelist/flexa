@@ -1,0 +1,18 @@
+# Flexa
+
+## Docs
+
+- [Documentation](https://docs.flexa.co/introduction.md): Learn how to integrate Flexa payments using our guides and sample code.
+- [Build your own integration](https://docs.flexa.co/payments/acceptance-options/build-your-own.md): Create a custom acceptance experience using the Flexa API.
+- [In-person payments](https://docs.flexa.co/payments/acceptance-options/in-person.md): Explore your options for enabling Flexa Payments in person.
+- [Online payments](https://docs.flexa.co/payments/acceptance-options/online.md): Explore how to accept digital currency payments with Flexa.
+- [Overview](https://docs.flexa.co/payments/acceptance-options/overview.md): Choose how to offer Flexa Payments at your points of sale.
+- [Go-live checklist](https://docs.flexa.co/payments/checklist.md): Use this checklist to ensure your integration is ready for prime time.
+- [Supported currencies](https://docs.flexa.co/payments/currencies.md): Discover the variety of currencies supported by Flexa Payments.
+- [Getting started](https://docs.flexa.co/payments/getting-started.md): Discover how to start accepting digital currency payments.
+- [Payments](https://docs.flexa.co/payments/overview.md): Explore how to accept digital currency payments with Flexa.
+- [Test your integration](https://docs.flexa.co/payments/testing.md): Use test credits to ensure your integration is working as intended.
+
+## OpenAPI Specs
+
+- [openapi](https://docs.flexa.co/api/openapi.json)
