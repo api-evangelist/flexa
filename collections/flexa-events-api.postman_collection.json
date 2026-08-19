@@ -1,0 +1,169 @@
+{
+  "item": [
+    {
+      "id": "797b64d1-46a0-45a0-87d7-09b84b7813cd",
+      "name": "Events",
+      "description": {
+        "content": "Events are created when any of the core resources on the Flexa platform change in a meaningful way, such as when a commerce intent succeeds or a digital asset transaction is requested. Clients subscribe to a stream that is provided over [Server-Sent Events (SSE)](https://en.wikipedia.org/wiki/Server-sent_events).\n",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "eb3ac963-7233-45b6-8caa-567598f61ba4",
+          "name": "Stream new Events",
+          "request": {
+            "name": "Stream new Events",
+            "description": {
+              "content": "Streams all of an API key's events as they occur using [Server-Sent Events (SSE)](https://en.wikipedia.org/wiki/Server-sent_events).\n\nWe strongly recommend subscribing to the SSE stream of event data by providing the `Accept: text/event-stream` header with your request. \nWhen using SSE, the server will maintain a long-lived connection and will return events as chunks, each consisting of an event `type` and `id` as well as the event data. Each chunk will be separated by blank lines, as in the example below:\n\n```text\nevent: commerce_intent.created\nid: event_JQ9pFH8FHrV8WPH5Fxq8m\ndata: { \"id\": \"event_FQVccxrX3RgJ9X5q94Cp9\", \"object\": \"event\", \"api_version\": \"2025-12-18\", \"data\": { ... }, \"type\": \"commerce_intent.created\", \"created\": 1706753855 }\n\ndata: keep-alive\n\nevent: commerce_intent.succeeded\nid: event_JQ9pFH8FHrV8WPH5Fxq8m\ndata: { \"id\": \"event_JQ9pFH8FHrV8WPH5Fxq8m\", \"object\": \"event\", \"api_version\": \"2025-12-18\", \"data\": { ... }, \"type\": \"commerce_intent.succeeded\", \"created\": 1706753857 }\n``` \n\nWhen subscribed to server-sent events, the server will pad the response with a single-line `data: keep-alive` heartbeat during every second that no events are sent while the connection remains open.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "events"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "types",
+                  "value": "<string>",
+                  "description": "An array of up to 20 strings (separated by commas) specifying the types of events to return in the response. Can also be queried as `type` in singular form if so desired."
+                },
+                {
+                  "disabled": false,
+                  "key": "types",
+                  "value": "<string>",
+                  "description": "An array of up to 20 strings (separated by commas) specifying the types of events to return in the response. Can also be queried as `type` in singular form if so desired."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "The API version to use for processing this request.",
+                "key": "Flexa-Version",
+                "value": "<string>"
+              },
+              {
+                "key": "Accept",
+                "value": "text/event-stream"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "4645cac6-c9a3-4082-950f-cf2f8b4daece",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "events"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "types",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "types",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "The API version to use for processing this request.",
+                    "key": "Flexa-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Accept",
+                    "value": "text/event-stream"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "text/event-stream"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "The API version used to process this request.",
+                  "key": "Flexa-Version",
+                  "value": "2025-12-18"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "text/event-stream"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.flexa.co",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "username",
+        "value": "{{basicAuthUsername}}"
+      },
+      {
+        "key": "password",
+        "value": "{{basicAuthPassword}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "aadff62e-0da6-439b-b64d-75e219b9d107",
+    "name": "Flexa Assets Events API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Flexa API offers access to Flexa’s powerful, instant, and completely fraud-resistant platform for accepting digital asset payments from your customers.\n\n# Authentication\n\nAll requests to the Flexa API are authenticated with API keys, which are accepted using [HTTP Basic Authentication](https://en.wikipedia.org/wiki/Basic_access_authentication). To connect, simply include your API key as the “username” value when providing the `Authorization` header. A password is not required.\n\nYour API keys are sensitive credentials—please take care to secure them properly so that they don’t fall into the wrong hands. If you need to rotate your API keys for any reason, simply reach out to [Flexa Support](mailto:support@flexa.co).\n\nIf you want to make requests against the Flexa API without moving any actual value, use your test API keys. Test API keys are prefixed `publishable_test_` or `secret_test_`, and can be used to experiment with the Flexa API using test mode assets, which include all popular testnet assets as well as Flexa Credit (CR).\n\n\nContact Support:\n Name: Flexa Support\n Email: support@flexa.co",
+      "type": "text/plain"
+    }
+  }
+}

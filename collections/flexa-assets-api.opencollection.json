@@ -1,0 +1,59 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Flexa Assets API",
+    "version": "2025-12-18"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Assets",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List all Assets",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.flexa.co/assets",
+            "headers": [
+              {
+                "name": "Flexa-Version",
+                "value": ""
+              }
+            ]
+          },
+          "docs": "Returns a list of all assets supported by Flexa for payments."
+        },
+        {
+          "info": {
+            "name": "Retrieve an Asset",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.flexa.co/assets/:id",
+            "headers": [
+              {
+                "name": "Flexa-Version",
+                "value": ""
+              }
+            ]
+          },
+          "docs": "Retrieves the details of a specific asset."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

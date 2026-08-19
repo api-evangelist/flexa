@@ -1,0 +1,63 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Flexa Assets Refunds API",
+    "version": "2025-12-18"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Refunds",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create a Refund",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.flexa.co/refunds",
+            "headers": [
+              {
+                "name": "Flexa-Version",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a refund object.\n\nRefunds can be created to return the value of any successful commerce intent to the customer, and can be made for any amount, any number of times—as long as the total amount refunded for a given commerce intent does not exceed the amount originally paid by the customer.\n"
+        },
+        {
+          "info": {
+            "name": "Retrieve a Refund",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.flexa.co/refunds/:id",
+            "headers": [
+              {
+                "name": "Flexa-Version",
+                "value": ""
+              }
+            ]
+          },
+          "docs": "Retrieves the details of a previously created refund."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

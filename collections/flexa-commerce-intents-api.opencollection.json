@@ -1,0 +1,80 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Flexa Assets Commerce Intents API",
+    "version": "2025-12-18"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Commerce Intents",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create a Commerce Intent",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.flexa.co/commerce_intents",
+            "headers": [
+              {
+                "name": "Flexa-Version",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a commerce intent object.\n\nCommerce intents are especially powereful because they allow you to accept any Flexa-supported digital asset from your customers without any additional configuration.\n\nIf you’re scanning a Flexa barcode in person from a customer device, include the barcode string as `authorization.number` in your request, and Flexa will collect payment directly from that customer.\n\nOr, to create an open-ended commerce intent and accept payments from any customer in other contex"
+        },
+        {
+          "info": {
+            "name": "Retrieve a Commerce Intent",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.flexa.co/commerce_intents/:id",
+            "headers": [
+              {
+                "name": "Flexa-Version",
+                "value": ""
+              }
+            ]
+          },
+          "docs": "Retrieves the details of a previously created commerce intent."
+        },
+        {
+          "info": {
+            "name": "Cancel a Commerce Intent",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.flexa.co/commerce_intents/:id/cancel",
+            "headers": [
+              {
+                "name": "Flexa-Version",
+                "value": ""
+              }
+            ]
+          },
+          "docs": "Cancels a commerce intent.\n\nAs long as a commerce intent has not already succeeded, it can be canceled, which will prevent any customers from being able to fulfill it. As a best practice, you should cancel any commerce intents you no longer plan to use.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

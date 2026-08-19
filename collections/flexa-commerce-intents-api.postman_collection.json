@@ -1,0 +1,599 @@
+{
+  "item": [
+    {
+      "id": "06809c03-8d65-466c-82dc-4f79da9616e2",
+      "name": "Commerce Intents",
+      "description": {
+        "content": "Commerce intents offer a versatile way to process digital asset payments from your customers using any sales channel.\n",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "ab8490e1-3cc5-425b-9515-5f1366b8135b",
+          "name": "Create a Commerce Intent",
+          "request": {
+            "name": "Create a Commerce Intent",
+            "description": {
+              "content": "Creates a commerce intent object.\n\nCommerce intents are especially powereful because they allow you to accept any Flexa-supported digital asset from your customers without any additional configuration.\n\nIf you’re scanning a Flexa barcode in person from a customer device, include the barcode string as `authorization.number` in your request, and Flexa will collect payment directly from that customer.\n\nOr, to create an open-ended commerce intent and accept payments from any customer in other contexts—including in-person payments using QR codes, online payments using payment links, and more—simply exclude the `authorization` object from your request entirely.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "commerce_intents"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "The API version to use for processing this request.",
+                "key": "Flexa-Version",
+                "value": "<string>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": \"<string>\",\n  \"asset\": \"<string>\",\n  \"authorization\": {\n    \"number\": \"<string>\"\n  },\n  \"capture_method\": \"<string>\",\n  \"description\": \"<string>\",\n  \"link\": {\n    \"after_completion\": {\n      \"redirect_url\": \"<string>\"\n    },\n    \"restrictions\": {\n      \"chains\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    }\n  },\n  \"mid\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "6d4d5f5c-1b43-45d4-9f5f-2dcc9b6229db",
+              "name": "Created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "commerce_intents"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "The API version to use for processing this request.",
+                    "key": "Flexa-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"mid\": \"370748471846382\",\n  \"amount\": \"19.99\",\n  \"asset\": \"iso4217/USD\",\n  \"description\": \"Invoice #BR1984\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "The API version used to process this request.",
+                  "key": "Flexa-Version",
+                  "value": "2025-12-18"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"ci_8wqPG5gM8vQxF4PCP8mp8\",\n  \"object\": \"commerce_intent\",\n  \"amount\": \"19.99\",\n  \"amount_capturable\": \"string\",\n  \"amount_received\": \"string\",\n  \"asset\": \"iso4217/USD\",\n  \"description\": \"Invoice #BR1984\",\n  \"display_id\": \"AB4JJP\",\n  \"link\": {\n    \"id\": \"link_RjF8vWwGc4JmJgchmf3Jr\",\n    \"object\": \"link\",\n    \"active\": true,\n    \"after_completion\": {\n      \"redirect_url\": \"string\"\n    },\n    \"amount\": \"19.99\",\n    \"asset\": \"iso4217/USD\",\n    \"restrictions\": {},\n    \"reusable\": false,\n    \"test_mode\": false,\n    \"theme\": {},\n    \"type\": \"pay\",\n    \"url\": \"https://pay.flexa.co/M8jw5PMX\",\n    \"created\": 1520845080,\n    \"updated\": 1520845080\n  },\n  \"mid\": \"370748471846382\",\n  \"status\": \"pending\",\n  \"test_mode\": false,\n  \"created\": 1520845080,\n  \"updated\": 1520845080\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "374e3532-3599-45b0-a80f-d8a8ccb0e685",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "commerce_intents"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "The API version to use for processing this request.",
+                    "key": "Flexa-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"mid\": \"370748471846382\",\n  \"amount\": \"19.99\",\n  \"asset\": \"iso4217/USD\",\n  \"description\": \"Invoice #BR1984\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "The API version used to process this request.",
+                  "key": "Flexa-Version",
+                  "value": "2025-12-18"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"https://example.com/errors/bad-request\",\n  \"title\": \"Bad Request\",\n  \"status\": 400,\n  \"detail\": \"The request was invalid.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "95a8cdb8-ff10-4833-9e14-3dd4b283fde2",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "commerce_intents"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "The API version to use for processing this request.",
+                    "key": "Flexa-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"mid\": \"370748471846382\",\n  \"amount\": \"19.99\",\n  \"asset\": \"iso4217/USD\",\n  \"description\": \"Invoice #BR1984\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "The API version used to process this request.",
+                  "key": "Flexa-Version",
+                  "value": "2025-12-18"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"https://example.com/errors/forbidden\",\n  \"title\": \"Forbidden\",\n  \"status\": 403,\n  \"detail\": \"You are not authorized to access this resource.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "bc9a4acc-53ef-4426-b5c7-10e4ffbc55d1",
+          "name": "Retrieve a Commerce Intent",
+          "request": {
+            "name": "Retrieve a Commerce Intent",
+            "description": {
+              "content": "Retrieves the details of a previously created commerce intent.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "commerce_intents",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "The API version to use for processing this request.",
+                "key": "Flexa-Version",
+                "value": "<string>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "833f3f4b-5ca0-4896-909a-217456e7f399",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "commerce_intents",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "The API version to use for processing this request.",
+                    "key": "Flexa-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "The API version used to process this request.",
+                  "key": "Flexa-Version",
+                  "value": "2025-12-18"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"ci_8wqPG5gM8vQxF4PCP8mp8\",\n  \"object\": \"commerce_intent\",\n  \"amount\": \"19.99\",\n  \"amount_capturable\": \"string\",\n  \"amount_received\": \"string\",\n  \"asset\": \"iso4217/USD\",\n  \"description\": \"Invoice #BR1984\",\n  \"display_id\": \"AB4JJP\",\n  \"link\": {\n    \"id\": \"link_RjF8vWwGc4JmJgchmf3Jr\",\n    \"object\": \"link\",\n    \"active\": true,\n    \"after_completion\": {\n      \"redirect_url\": \"string\"\n    },\n    \"amount\": \"19.99\",\n    \"asset\": \"iso4217/USD\",\n    \"restrictions\": {},\n    \"reusable\": false,\n    \"test_mode\": false,\n    \"theme\": {},\n    \"type\": \"pay\",\n    \"url\": \"https://pay.flexa.co/M8jw5PMX\",\n    \"created\": 1520845080,\n    \"updated\": 1520845080\n  },\n  \"mid\": \"370748471846382\",\n  \"status\": \"pending\",\n  \"test_mode\": false,\n  \"created\": 1520845080,\n  \"updated\": 1520845080\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "50eead89-0120-41af-9ad2-24fc615201b6",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "commerce_intents",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "The API version to use for processing this request.",
+                    "key": "Flexa-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "The API version used to process this request.",
+                  "key": "Flexa-Version",
+                  "value": "2025-12-18"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"https://example.com/errors/not-found\",\n  \"title\": \"Not Found\",\n  \"status\": 404,\n  \"detail\": \"The resource you are trying to access does not exist.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "14578b6f-0784-4a5f-ac8b-de8c3e9f24b6",
+          "name": "Cancel a Commerce Intent",
+          "request": {
+            "name": "Cancel a Commerce Intent",
+            "description": {
+              "content": "Cancels a commerce intent.\n\nAs long as a commerce intent has not already succeeded, it can be canceled, which will prevent any customers from being able to fulfill it. As a best practice, you should cancel any commerce intents you no longer plan to use.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "commerce_intents",
+                ":id",
+                "cancel"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "The API version to use for processing this request.",
+                "key": "Flexa-Version",
+                "value": "<string>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "d23b21ba-1810-4a62-882c-e47fcbba6524",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "commerce_intents",
+                    ":id",
+                    "cancel"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "The API version to use for processing this request.",
+                    "key": "Flexa-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "The API version used to process this request.",
+                  "key": "Flexa-Version",
+                  "value": "2025-12-18"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"ci_8wqPG5gM8vQxF4PCP8mp8\",\n  \"object\": \"commerce_intent\",\n  \"amount\": \"19.99\",\n  \"amount_capturable\": \"0.00\",\n  \"amount_received\": \"0.00\",\n  \"asset\": \"iso4217/USD\",\n  \"description\": \"Invoice #BR1984\",\n  \"display_id\": \"AB4JJP\",\n  \"link\": {\n    \"id\": \"link_RjF8vWwGc4JmJgchmf3Jr\",\n    \"object\": \"link\",\n    \"active\": false,\n    \"after_completion\": {\n      \"redirect_url\": \"null\"\n    },\n    \"amount\": \"19.99\",\n    \"asset\": \"iso4217/USD\",\n    \"restrictions\": {\n      \"chains\": []\n    },\n    \"reusable\": false,\n    \"suggested_apps\": [],\n    \"test_mode\": false,\n    \"theme\": {},\n    \"type\": \"pay\",\n    \"url\": \"https://pay.flexa.co/M8jw5PMX\",\n    \"created\": 1520845080,\n    \"updated\": 1520845084\n  },\n  \"mid\": \"370748471846382\",\n  \"status\": \"canceled\",\n  \"test_mode\": false,\n  \"created\": 1520845080,\n  \"updated\": 1520845084\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4c124357-5774-43c4-bbaf-a881a2c7cf1b",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "commerce_intents",
+                    ":id",
+                    "cancel"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "The API version to use for processing this request.",
+                    "key": "Flexa-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "The API version used to process this request.",
+                  "key": "Flexa-Version",
+                  "value": "2025-12-18"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"https://example.com/errors/forbidden\",\n  \"title\": \"Forbidden\",\n  \"status\": 403,\n  \"detail\": \"You are not authorized to access this resource.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.flexa.co",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "username",
+        "value": "{{basicAuthUsername}}"
+      },
+      {
+        "key": "password",
+        "value": "{{basicAuthPassword}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "d4eeae0a-f745-42cc-8d4f-57cf2d233d05",
+    "name": "Flexa Assets Commerce Intents API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Flexa API offers access to Flexa’s powerful, instant, and completely fraud-resistant platform for accepting digital asset payments from your customers.\n\n# Authentication\n\nAll requests to the Flexa API are authenticated with API keys, which are accepted using [HTTP Basic Authentication](https://en.wikipedia.org/wiki/Basic_access_authentication). To connect, simply include your API key as the “username” value when providing the `Authorization` header. A password is not required.\n\nYour API keys are sensitive credentials—please take care to secure them properly so that they don’t fall into the wrong hands. If you need to rotate your API keys for any reason, simply reach out to [Flexa Support](mailto:support@flexa.co).\n\nIf you want to make requests against the Flexa API without moving any actual value, use your test API keys. Test API keys are prefixed `publishable_test_` or `secret_test_`, and can be used to experiment with the Flexa API using test mode assets, which include all popular testnet assets as well as Flexa Credit (CR).\n\n\nContact Support:\n Name: Flexa Support\n Email: support@flexa.co",
+      "type": "text/plain"
+    }
+  }
+}

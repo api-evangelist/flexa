@@ -1,0 +1,442 @@
+{
+  "item": [
+    {
+      "id": "d461afa7-26a4-4645-9abf-9ced6dad4054",
+      "name": "Refunds",
+      "description": {
+        "content": "Refunds are the only way by which a Flexa payment can be reversed. Refunds are always initiated by the recipient, and can be made for either a partial amount or the full value of the original payment.\n\nBecause Flexa supports payments using a wide variety of assets, including some that are highly price-volatile, refunds are always processed using current exchange rates. For example, if a customer makes a payment using bitcoin, and the commerce intent wasn’t denominated in bitcoin, the customer may not receive a refund for the exact same amount of bitcoin that they originally paid. Instead, the payment amount will be converted back into bitcoin using the market exchange rate before it’s refunded.\n",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "d43a0a91-04cf-4b7f-b057-1be36fa6643b",
+          "name": "Create a Refund",
+          "request": {
+            "name": "Create a Refund",
+            "description": {
+              "content": "Creates a refund object.\n\nRefunds can be created to return the value of any successful commerce intent to the customer, and can be made for any amount, any number of times—as long as the total amount refunded for a given commerce intent does not exceed the amount originally paid by the customer.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "refunds"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "The API version to use for processing this request.",
+                "key": "Flexa-Version",
+                "value": "<string>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": \"<string>\",\n  \"commerce_intent\": \"<string>\",\n  \"reason\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "6c8e9b9e-b468-45bd-a3e2-4babe56788b2",
+              "name": "Created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "refunds"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "The API version to use for processing this request.",
+                    "key": "Flexa-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount\": \"10.50\",\n  \"commerce_intent\": \"ci_cCHGVMpPXQ47wWpRG7X54\",\n  \"reason\": \"return\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "The API version used to process this request.",
+                  "key": "Flexa-Version",
+                  "value": "2025-12-18"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"refund_WJqQ2wFX7phhXM2RXmmgP\",\n  \"object\": \"refund\",\n  \"amount\": \"10.50\",\n  \"asset\": \"iso4217/USD\",\n  \"commerce_intent\": \"ci_cCHGVMpPXQ47wWpRG7X54\",\n  \"reason\": \"return\",\n  \"status\": \"succeeded\",\n  \"created\": 1520845080,\n  \"updated\": 1520845080\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ee771ac1-49a3-48fc-b952-64f0ca327bfa",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "refunds"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "The API version to use for processing this request.",
+                    "key": "Flexa-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount\": \"10.50\",\n  \"commerce_intent\": \"ci_cCHGVMpPXQ47wWpRG7X54\",\n  \"reason\": \"return\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "The API version used to process this request.",
+                  "key": "Flexa-Version",
+                  "value": "2025-12-18"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"https://example.com/errors/bad-request\",\n  \"title\": \"Bad Request\",\n  \"status\": 400,\n  \"detail\": \"The request was invalid.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3542c225-1d23-4083-ab13-cf64b06eb0ec",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "refunds"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "The API version to use for processing this request.",
+                    "key": "Flexa-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount\": \"10.50\",\n  \"commerce_intent\": \"ci_cCHGVMpPXQ47wWpRG7X54\",\n  \"reason\": \"return\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "The API version used to process this request.",
+                  "key": "Flexa-Version",
+                  "value": "2025-12-18"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"https://example.com/errors/forbidden\",\n  \"title\": \"Forbidden\",\n  \"status\": 403,\n  \"detail\": \"You are not authorized to access this resource.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3731935f-307e-4325-b67c-f8d4051615aa",
+          "name": "Retrieve a Refund",
+          "request": {
+            "name": "Retrieve a Refund",
+            "description": {
+              "content": "Retrieves the details of a previously created refund.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "refunds",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "The API version to use for processing this request.",
+                "key": "Flexa-Version",
+                "value": "<string>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "ca4dd7cc-fa0b-47ee-aa9d-23a76944f3f6",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "refunds",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "The API version to use for processing this request.",
+                    "key": "Flexa-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "The API version used to process this request.",
+                  "key": "Flexa-Version",
+                  "value": "2025-12-18"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"refund_WJqQ2wFX7phhXM2RXmmgP\",\n  \"object\": \"refund\",\n  \"amount\": \"10.50\",\n  \"asset\": \"iso4217/USD\",\n  \"commerce_intent\": \"ci_cCHGVMpPXQ47wWpRG7X54\",\n  \"reason\": \"return\",\n  \"status\": \"succeeded\",\n  \"created\": 1520845080,\n  \"updated\": 1520845080\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8d4d0841-7fc5-4377-8aca-9afaf08031df",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "refunds",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "The API version to use for processing this request.",
+                    "key": "Flexa-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "The API version used to process this request.",
+                  "key": "Flexa-Version",
+                  "value": "2025-12-18"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"https://example.com/errors/not-found\",\n  \"title\": \"Not Found\",\n  \"status\": 404,\n  \"detail\": \"The resource you are trying to access does not exist.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.flexa.co",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "username",
+        "value": "{{basicAuthUsername}}"
+      },
+      {
+        "key": "password",
+        "value": "{{basicAuthPassword}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "44463ae7-bd23-4040-9010-f605d195e7cd",
+    "name": "Flexa Assets Refunds API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Flexa API offers access to Flexa’s powerful, instant, and completely fraud-resistant platform for accepting digital asset payments from your customers.\n\n# Authentication\n\nAll requests to the Flexa API are authenticated with API keys, which are accepted using [HTTP Basic Authentication](https://en.wikipedia.org/wiki/Basic_access_authentication). To connect, simply include your API key as the “username” value when providing the `Authorization` header. A password is not required.\n\nYour API keys are sensitive credentials—please take care to secure them properly so that they don’t fall into the wrong hands. If you need to rotate your API keys for any reason, simply reach out to [Flexa Support](mailto:support@flexa.co).\n\nIf you want to make requests against the Flexa API without moving any actual value, use your test API keys. Test API keys are prefixed `publishable_test_` or `secret_test_`, and can be used to experiment with the Flexa API using test mode assets, which include all popular testnet assets as well as Flexa Credit (CR).\n\n\nContact Support:\n Name: Flexa Support\n Email: support@flexa.co",
+      "type": "text/plain"
+    }
+  }
+}

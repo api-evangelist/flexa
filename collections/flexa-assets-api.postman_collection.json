@@ -1,0 +1,295 @@
+{
+  "item": [
+    {
+      "id": "613a14b9-043d-455a-9e9a-3aa72c97defe",
+      "name": "Assets",
+      "description": {
+        "content": "Assets encompass all the value that flows through the Flexa platform. In the Flexa API, both national currencies (“fiat“) and digital currencies (“crypto“ or “digital assets“) are returned together in one collection.\n\nThe Flexa API uses [CAIP](https://chainagnostic.org/CAIPs/caip-19)-style IDs for all assets. National currency asset IDs are all prefixed with “iso4217/” and use [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) 3-digit alphabetic codes. For example, ether on Ethereum mainnet is `eip155:1/slip44:60`, and the Canadian dollar is `iso4217/CAD`.\n",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "5f033aec-95ce-4539-ba44-9a2a38c54678",
+          "name": "List all Assets",
+          "request": {
+            "name": "List all Assets",
+            "description": {
+              "content": "Returns a list of all assets supported by Flexa for payments.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "assets"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "The API version to use for processing this request.",
+                "key": "Flexa-Version",
+                "value": "<string>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "cd8cd799-c739-4c19-9833-90055aec7de4",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "assets"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "The API version to use for processing this request.",
+                    "key": "Flexa-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "The API version used to process this request.",
+                  "key": "Flexa-Version",
+                  "value": "2025-12-18"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"object\": \"collection\",\n  \"url\": \"/assets\",\n  \"has_more\": true,\n  \"data\": [\n    {\n      \"id\": \"eip155:1/slip44:60\",\n      \"object\": \"asset\",\n      \"chain\": {\n        \"id\": \"eip155:1\",\n        \"object\": \"chain\",\n        \"name\": \"Ethereum\",\n        \"namespace\": \"eip155\",\n        \"native_asset\": \"eip155:1/slip44:60\",\n        \"network\": \"netwrk_7cM535QGJMQ5F6Q5xW4Jh\",\n        \"test_network\": false,\n        \"created\": 1520845080,\n        \"updated\": 1520845080\n      },\n      \"color\": \"#5700ff\",\n      \"decimals\": 18,\n      \"icon_url\": \"https://flexa.media/assets/ether.svg\",\n      \"name\": \"Ether\",\n      \"namespace\": \"eip155\",\n      \"profile\": \"assetpf_f5q8f4J97jcxPW5Fwwv6g\",\n      \"symbol\": \"ETH\",\n      \"test_mode\": false,\n      \"created\": 1520845080,\n      \"updated\": 1520845080\n    },\n    {\n      \"id\": \"eip155:1/slip44:60\",\n      \"object\": \"asset\",\n      \"chain\": {\n        \"id\": \"eip155:1\",\n        \"object\": \"chain\",\n        \"name\": \"Ethereum\",\n        \"namespace\": \"eip155\",\n        \"native_asset\": \"eip155:1/slip44:60\",\n        \"network\": \"netwrk_7cM535QGJMQ5F6Q5xW4Jh\",\n        \"test_network\": false,\n        \"created\": 1520845080,\n        \"updated\": 1520845080\n      },\n      \"color\": \"#5700ff\",\n      \"decimals\": 18,\n      \"icon_url\": \"https://flexa.media/assets/ether.svg\",\n      \"name\": \"Ether\",\n      \"namespace\": \"eip155\",\n      \"profile\": \"assetpf_f5q8f4J97jcxPW5Fwwv6g\",\n      \"symbol\": \"ETH\",\n      \"test_mode\": false,\n      \"created\": 1520845080,\n      \"updated\": 1520845080\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "52d0f4b9-0973-461d-b00f-d80a0e6ae998",
+          "name": "Retrieve an Asset",
+          "request": {
+            "name": "Retrieve an Asset",
+            "description": {
+              "content": "Retrieves the details of a specific asset.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "assets",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "The API version to use for processing this request.",
+                "key": "Flexa-Version",
+                "value": "<string>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "0a202d38-b8f8-4fce-8b95-deb668ee05ef",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "assets",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "The API version to use for processing this request.",
+                    "key": "Flexa-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "The API version used to process this request.",
+                  "key": "Flexa-Version",
+                  "value": "2025-12-18"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"eip155:1/slip44:60\",\n  \"object\": \"asset\",\n  \"chain\": {\n    \"id\": \"eip155:1\",\n    \"object\": \"chain\",\n    \"name\": \"Ethereum\",\n    \"namespace\": \"eip155\",\n    \"native_asset\": \"eip155:1/slip44:60\",\n    \"network\": \"netwrk_7cM535QGJMQ5F6Q5xW4Jh\",\n    \"test_network\": false,\n    \"created\": 1520845080,\n    \"updated\": 1520845080\n  },\n  \"color\": \"#5700ff\",\n  \"decimals\": 18,\n  \"icon_url\": \"https://flexa.media/assets/ether.svg\",\n  \"name\": \"Ether\",\n  \"namespace\": \"eip155\",\n  \"profile\": \"assetpf_f5q8f4J97jcxPW5Fwwv6g\",\n  \"symbol\": \"ETH\",\n  \"test_mode\": false,\n  \"created\": 1520845080,\n  \"updated\": 1520845080\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f9f49e19-9b52-4623-abb2-bd3c2e07f928",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "assets",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "The API version to use for processing this request.",
+                    "key": "Flexa-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "The API version used to process this request.",
+                  "key": "Flexa-Version",
+                  "value": "2025-12-18"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"https://example.com/errors/not-found\",\n  \"title\": \"Not Found\",\n  \"status\": 404,\n  \"detail\": \"The resource you are trying to access does not exist.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.flexa.co",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "username",
+        "value": "{{basicAuthUsername}}"
+      },
+      {
+        "key": "password",
+        "value": "{{basicAuthPassword}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "a2150a9d-e046-4f99-b0b0-d66276c93146",
+    "name": "Flexa Assets API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Flexa API offers access to Flexa’s powerful, instant, and completely fraud-resistant platform for accepting digital asset payments from your customers.\n\n# Authentication\n\nAll requests to the Flexa API are authenticated with API keys, which are accepted using [HTTP Basic Authentication](https://en.wikipedia.org/wiki/Basic_access_authentication). To connect, simply include your API key as the “username” value when providing the `Authorization` header. A password is not required.\n\nYour API keys are sensitive credentials—please take care to secure them properly so that they don’t fall into the wrong hands. If you need to rotate your API keys for any reason, simply reach out to [Flexa Support](mailto:support@flexa.co).\n\nIf you want to make requests against the Flexa API without moving any actual value, use your test API keys. Test API keys are prefixed `publishable_test_` or `secret_test_`, and can be used to experiment with the Flexa API using test mode assets, which include all popular testnet assets as well as Flexa Credit (CR).\n\n\nContact Support:\n Name: Flexa Support\n Email: support@flexa.co",
+      "type": "text/plain"
+    }
+  }
+}

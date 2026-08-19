@@ -1,0 +1,54 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Flexa Assets Events API",
+    "version": "2025-12-18"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Events",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Stream new Events",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.flexa.co/events",
+            "headers": [
+              {
+                "name": "Flexa-Version",
+                "value": ""
+              },
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "types",
+                "value": "",
+                "type": "query",
+                "description": "An array of up to 20 strings (separated by commas) specifying the types of events to return in the response. Can also be queried as `type` in singular form if so desired."
+              }
+            ]
+          },
+          "docs": "Streams all of an API key's events as they occur using [Server-Sent Events (SSE)](https://en.wikipedia.org/wiki/Server-sent_events).\n\nWe strongly recommend subscribing to the SSE stream of event data by providing the `Accept: text/event-stream` header with your request. \nWhen using SSE, the server will maintain a long-lived connection and will return events as chunks, each consisting of an event `type` and `id` as well as the event data. Each chunk will be separated by blank lines, as in the exa"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
