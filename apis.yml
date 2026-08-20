@@ -127,6 +127,8 @@ apis:
   humanURL: https://docs.flexa.co/introduction
   baseURL: https://api.flexa.co
   tags:
+  - Event
+  tags_raw:
   - Events
   properties:
   - type: OpenAPI
