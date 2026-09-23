@@ -1,21 +1,7 @@
-openapi: 3.1.1
+openapi: 3.2.0
 info:
-  title: Flexa Assets Refunds API
-  description: 'The Flexa API offers access to Flexa’s powerful, instant, and completely fraud-resistant platform for accepting digital asset payments from your customers.
-
-
-    # Authentication
-
-
-    All requests to the Flexa API are authenticated with API keys, which are accepted using [HTTP Basic Authentication](https://en.wikipedia.org/wiki/Basic_access_authentication). To connect, simply include your API key as the “username” value when providing the `Authorization` header. A password is not required.
-
-
-    Your API keys are sensitive credentials—please take care to secure them properly so that they don’t fall into the wrong hands. If you need to rotate your API keys for any reason, simply reach out to [Flexa Support](mailto:support@flexa.co).
-
-
-    If you want to make requests against the Flexa API without moving any actual value, use your test API keys. Test API keys are prefixed `publishable_test_` or `secret_test_`, and can be used to experiment with the Flexa API using test mode assets, which include all popular testnet assets as well as Flexa Credit (CR).
-
-    '
+  title: Flexa Refunds API
+  description: The Flexa API offers access to Flexa’s powerful, instant, and completely fraud-resistant platform for accepting digital asset payments from your customers.
   version: '2025-12-18'
   contact:
     name: Flexa Support
@@ -30,12 +16,7 @@ security:
 - BasicAuth: []
 tags:
 - name: Refunds
-  description: 'Refunds are the only way by which a Flexa payment can be reversed. Refunds are always initiated by the recipient, and can be made for either a partial amount or the full value of the original payment.
-
-
-    Because Flexa supports payments using a wide variety of assets, including some that are highly price-volatile, refunds are always processed using current exchange rates. For example, if a customer makes a payment using bitcoin, and the commerce intent wasn’t denominated in bitcoin, the customer may not receive a refund for the exact same amount of bitcoin that they originally paid. Instead, the payment amount will be converted back into bitcoin using the market exchange rate before it’s refunded.
-
-    '
+  description: Refunds are the only way by which a Flexa payment can be reversed.
 paths:
   /refunds:
     post:
@@ -45,9 +26,7 @@ paths:
       description: 'Creates a refund object.
 
 
-        Refunds can be created to return the value of any successful commerce intent to the customer, and can be made for any amount, any number of times—as long as the total amount refunded for a given commerce intent does not exceed the amount originally paid by the customer.
-
-        '
+        Refunds can be created to return the value of any successful commerce intent to the customer, and can be made for any amount, any number of times—as long as the total amount refunded for a given commerce intent does not exceed the amount originally paid by the customer.'
       parameters:
       - $ref: '#/components/parameters/FlexaVersion'
       requestBody:
@@ -69,6 +48,8 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '403':
           $ref: '#/components/responses/Forbidden'
+      operationId: postRefunds
+      x-operation-id-source: derived
   /refunds/{id}:
     get:
       tags:
@@ -89,74 +70,38 @@ paths:
                 $ref: '#/components/schemas/Refund'
         '404':
           $ref: '#/components/responses/NotFound'
+      operationId: getRefundsById
+      x-operation-id-source: derived
 components:
+  responses:
+    BadRequest:
+      description: Bad Request
+      headers:
+        Flexa-Version:
+          $ref: '#/components/headers/Flexa-Version'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BadRequestError'
+    Forbidden:
+      description: Forbidden
+      headers:
+        Flexa-Version:
+          $ref: '#/components/headers/Flexa-Version'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ForbiddenError'
+    NotFound:
+      description: Not Found
+      headers:
+        Flexa-Version:
+          $ref: '#/components/headers/Flexa-Version'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NotFoundError'
   schemas:
-    BadRequestError:
-      x-scalar-ignore: true
-      description: RFC 7807 (https://datatracker.ietf.org/doc/html/rfc7807)
-      type: object
-      properties:
-        type:
-          type: string
-          examples:
-          - https://example.com/errors/bad-request
-        title:
-          type: string
-          examples:
-          - Bad Request
-        status:
-          type: integer
-          format: int64
-          examples:
-          - 400
-        detail:
-          type: string
-          examples:
-          - The request was invalid.
-    NotFoundError:
-      x-scalar-ignore: true
-      description: RFC 7807 (https://datatracker.ietf.org/doc/html/rfc7807)
-      type: object
-      properties:
-        type:
-          type: string
-          examples:
-          - https://example.com/errors/not-found
-        title:
-          type: string
-          examples:
-          - Not Found
-        status:
-          type: integer
-          format: int64
-          examples:
-          - 404
-        detail:
-          type: string
-          examples:
-          - The resource you are trying to access does not exist.
-    RefundCreateRequest:
-      type: object
-      required:
-      - amount
-      - commerce_intent
-      properties:
-        amount:
-          type: string
-          description: The amount to refund to the customer.
-          example: '10.50'
-        commerce_intent:
-          type: string
-          description: The ID of the commerce intent to refund.
-          example: ci_cCHGVMpPXQ47wWpRG7X54
-        reason:
-          type: string
-          enum:
-          - customer_request
-          - duplicate
-          - return
-          description: The reason for the return.
-          example: return
     Refund:
       type: object
       properties:
@@ -223,6 +168,72 @@ components:
           type: string
           examples:
           - You are not authorized to access this resource.
+    NotFoundError:
+      x-scalar-ignore: true
+      description: RFC 7807 (https://datatracker.ietf.org/doc/html/rfc7807)
+      type: object
+      properties:
+        type:
+          type: string
+          examples:
+          - https://example.com/errors/not-found
+        title:
+          type: string
+          examples:
+          - Not Found
+        status:
+          type: integer
+          format: int64
+          examples:
+          - 404
+        detail:
+          type: string
+          examples:
+          - The resource you are trying to access does not exist.
+    BadRequestError:
+      x-scalar-ignore: true
+      description: RFC 7807 (https://datatracker.ietf.org/doc/html/rfc7807)
+      type: object
+      properties:
+        type:
+          type: string
+          examples:
+          - https://example.com/errors/bad-request
+        title:
+          type: string
+          examples:
+          - Bad Request
+        status:
+          type: integer
+          format: int64
+          examples:
+          - 400
+        detail:
+          type: string
+          examples:
+          - The request was invalid.
+    RefundCreateRequest:
+      type: object
+      required:
+      - amount
+      - commerce_intent
+      properties:
+        amount:
+          type: string
+          description: The amount to refund to the customer.
+          example: '10.50'
+        commerce_intent:
+          type: string
+          description: The ID of the commerce intent to refund.
+          example: ci_cCHGVMpPXQ47wWpRG7X54
+        reason:
+          type: string
+          enum:
+          - customer_request
+          - duplicate
+          - return
+          description: The reason for the return.
+          example: return
   parameters:
     FlexaVersion:
       in: header
@@ -231,34 +242,6 @@ components:
       schema:
         type: string
         example: '2025-12-18'
-  responses:
-    BadRequest:
-      description: Bad Request
-      headers:
-        Flexa-Version:
-          $ref: '#/components/headers/Flexa-Version'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/BadRequestError'
-    NotFound:
-      description: Not Found
-      headers:
-        Flexa-Version:
-          $ref: '#/components/headers/Flexa-Version'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/NotFoundError'
-    Forbidden:
-      description: Forbidden
-      headers:
-        Flexa-Version:
-          $ref: '#/components/headers/Flexa-Version'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ForbiddenError'
   headers:
     Flexa-Version:
       description: The API version used to process this request.

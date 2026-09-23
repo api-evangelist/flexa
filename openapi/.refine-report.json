@@ -1,10 +1,7 @@
 {
   "provider": "flexa",
   "sources": [
-    "flexa-assets-api-openapi.yml",
-    "flexa-commerce-intents-api-openapi.yml",
-    "flexa-events-api-openapi.yml",
-    "flexa-refunds-api-openapi.yml"
+    "_original/flexa-openapi.json"
   ],
   "outputs": [
     "flexa-assets-api-openapi.yml",
@@ -15,6 +12,15 @@
   "archived": [],
   "errors": [],
   "warnings": [],
-  "notes": [],
-  "skipped": []
+  "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "flexa-openapi.json: upgraded openapi 3.1.1 -> OpenAPI 3.2.0",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "flexa-assets-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "flexa-commerce-intents-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "flexa-events-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "flexa-refunds-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }
