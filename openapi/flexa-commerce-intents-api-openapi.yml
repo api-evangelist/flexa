@@ -141,34 +141,6 @@ paths:
       operationId: postCommerceIntentsByIdCancel
       x-operation-id-source: derived
 components:
-  responses:
-    BadRequest:
-      description: Bad Request
-      headers:
-        Flexa-Version:
-          $ref: '#/components/headers/Flexa-Version'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/BadRequestError'
-    Forbidden:
-      description: Forbidden
-      headers:
-        Flexa-Version:
-          $ref: '#/components/headers/Flexa-Version'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ForbiddenError'
-    NotFound:
-      description: Not Found
-      headers:
-        Flexa-Version:
-          $ref: '#/components/headers/Flexa-Version'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/NotFoundError'
   schemas:
     Link:
       type: object
@@ -248,6 +220,28 @@ components:
           type: integer
           description: The time at which this link was last updated, in non-leap seconds since the Unix epoch.
           example: 1520845080
+    ForbiddenError:
+      x-scalar-ignore: true
+      description: RFC 7807 (https://datatracker.ietf.org/doc/html/rfc7807)
+      type: object
+      properties:
+        type:
+          type: string
+          examples:
+          - https://example.com/errors/forbidden
+        title:
+          type: string
+          examples:
+          - Forbidden
+        status:
+          type: integer
+          format: int64
+          examples:
+          - 403
+        detail:
+          type: string
+          examples:
+          - You are not authorized to access this resource.
     CommerceIntent:
       type: object
       properties:
@@ -315,7 +309,7 @@ components:
           type: integer
           description: The time at which this commerce intent was last updated, in non-leap seconds since the Unix epoch.
           example: 1520845080
-    ForbiddenError:
+    BadRequestError:
       x-scalar-ignore: true
       description: RFC 7807 (https://datatracker.ietf.org/doc/html/rfc7807)
       type: object
@@ -323,20 +317,42 @@ components:
         type:
           type: string
           examples:
-          - https://example.com/errors/forbidden
+          - https://example.com/errors/bad-request
         title:
           type: string
           examples:
-          - Forbidden
+          - Bad Request
         status:
           type: integer
           format: int64
           examples:
-          - 403
+          - 400
         detail:
           type: string
           examples:
-          - You are not authorized to access this resource.
+          - The request was invalid.
+    NotFoundError:
+      x-scalar-ignore: true
+      description: RFC 7807 (https://datatracker.ietf.org/doc/html/rfc7807)
+      type: object
+      properties:
+        type:
+          type: string
+          examples:
+          - https://example.com/errors/not-found
+        title:
+          type: string
+          examples:
+          - Not Found
+        status:
+          type: integer
+          format: int64
+          examples:
+          - 404
+        detail:
+          type: string
+          examples:
+          - The resource you are trying to access does not exist.
     CommerceIntentCreateRequest:
       type: object
       required:
@@ -389,50 +405,6 @@ components:
         mid:
           type: string
           description: The MID to use for processing this commerce intent. Only required for teams with access to multiple MIDs.
-    NotFoundError:
-      x-scalar-ignore: true
-      description: RFC 7807 (https://datatracker.ietf.org/doc/html/rfc7807)
-      type: object
-      properties:
-        type:
-          type: string
-          examples:
-          - https://example.com/errors/not-found
-        title:
-          type: string
-          examples:
-          - Not Found
-        status:
-          type: integer
-          format: int64
-          examples:
-          - 404
-        detail:
-          type: string
-          examples:
-          - The resource you are trying to access does not exist.
-    BadRequestError:
-      x-scalar-ignore: true
-      description: RFC 7807 (https://datatracker.ietf.org/doc/html/rfc7807)
-      type: object
-      properties:
-        type:
-          type: string
-          examples:
-          - https://example.com/errors/bad-request
-        title:
-          type: string
-          examples:
-          - Bad Request
-        status:
-          type: integer
-          format: int64
-          examples:
-          - 400
-        detail:
-          type: string
-          examples:
-          - The request was invalid.
   parameters:
     FlexaVersion:
       in: header
@@ -441,6 +413,34 @@ components:
       schema:
         type: string
         example: '2025-12-18'
+  responses:
+    Forbidden:
+      description: Forbidden
+      headers:
+        Flexa-Version:
+          $ref: '#/components/headers/Flexa-Version'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ForbiddenError'
+    NotFound:
+      description: Not Found
+      headers:
+        Flexa-Version:
+          $ref: '#/components/headers/Flexa-Version'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NotFoundError'
+    BadRequest:
+      description: Bad Request
+      headers:
+        Flexa-Version:
+          $ref: '#/components/headers/Flexa-Version'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BadRequestError'
   headers:
     Flexa-Version:
       description: The API version used to process this request.

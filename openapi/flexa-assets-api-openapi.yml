@@ -83,6 +83,71 @@ components:
         type: string
         example: '2025-12-18'
   schemas:
+    Collection:
+      description: A collection
+      type: object
+      properties:
+        object:
+          type: string
+          example: collection
+        url:
+          type: string
+        has_more:
+          type: boolean
+          example: true
+    Asset:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The [CAIP-19](https://chainagnostic.org/CAIPs/caip-19) ID of the asset. National currencies such as the United States dollar are identified using the prefix “iso4217/” and the 3-digit alphabetic code of [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).
+          example: eip155:1/slip44:60
+        object:
+          type: string
+          example: asset
+        chain:
+          description: A chain object including details of the chain on which this asset was issued. Not applicable to national currency assets.
+          $ref: '#/components/schemas/Chain'
+        color:
+          type: string
+          description: A hexadecimal color that can be used for tinting any UI related to this asset.
+          example: '#5700ff'
+        decimals:
+          type: integer
+          description: The number of decimal places used by this asset.
+          example: 18
+        icon_url:
+          type: string
+          description: The URL for the asset's icon.
+          example: https://flexa.media/assets/ether.svg
+        name:
+          type: string
+          description: The common name of the asset.
+          example: Ether
+        namespace:
+          type: string
+          description: The [CAIP namespace](https://namespaces.chainagnostic.org) of the asset.
+          example: eip155
+        profile:
+          type: string
+          description: The ID of the asset profile for this asset.
+          example: assetpf_f5q8f4J97jcxPW5Fwwv6g
+        symbol:
+          type: string
+          description: The common trading symbol of the asset.
+          example: ETH
+        test_mode:
+          type: boolean
+          description: Whether this asset is valueless and thus available in test mode (true) or live mode where it can be used to exchange real value (false).
+          example: false
+        created:
+          type: integer
+          description: The time at which this asset was enabled on Flexa, in non-leap seconds since the Unix epoch.
+          example: 1520845080
+        updated:
+          type: integer
+          description: The time at which Flexa’s information about this asset was last updated, in non-leap seconds since the Unix epoch.
+          example: 1520845080
     NotFoundError:
       x-scalar-ignore: true
       description: RFC 7807 (https://datatracker.ietf.org/doc/html/rfc7807)
@@ -143,71 +208,6 @@ components:
           type: integer
           description: The time at which Flexa’s information about this chain was last updated, in non-leap seconds since the Unix epoch.
           example: 1520845080
-    Asset:
-      type: object
-      properties:
-        id:
-          type: string
-          description: The [CAIP-19](https://chainagnostic.org/CAIPs/caip-19) ID of the asset. National currencies such as the United States dollar are identified using the prefix “iso4217/” and the 3-digit alphabetic code of [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).
-          example: eip155:1/slip44:60
-        object:
-          type: string
-          example: asset
-        chain:
-          description: A chain object including details of the chain on which this asset was issued. Not applicable to national currency assets.
-          $ref: '#/components/schemas/Chain'
-        color:
-          type: string
-          description: A hexadecimal color that can be used for tinting any UI related to this asset.
-          example: '#5700ff'
-        decimals:
-          type: integer
-          description: The number of decimal places used by this asset.
-          example: 18
-        icon_url:
-          type: string
-          description: The URL for the asset's icon.
-          example: https://flexa.media/assets/ether.svg
-        name:
-          type: string
-          description: The common name of the asset.
-          example: Ether
-        namespace:
-          type: string
-          description: The [CAIP namespace](https://namespaces.chainagnostic.org) of the asset.
-          example: eip155
-        profile:
-          type: string
-          description: The ID of the asset profile for this asset.
-          example: assetpf_f5q8f4J97jcxPW5Fwwv6g
-        symbol:
-          type: string
-          description: The common trading symbol of the asset.
-          example: ETH
-        test_mode:
-          type: boolean
-          description: Whether this asset is valueless and thus available in test mode (true) or live mode where it can be used to exchange real value (false).
-          example: false
-        created:
-          type: integer
-          description: The time at which this asset was enabled on Flexa, in non-leap seconds since the Unix epoch.
-          example: 1520845080
-        updated:
-          type: integer
-          description: The time at which Flexa’s information about this asset was last updated, in non-leap seconds since the Unix epoch.
-          example: 1520845080
-    Collection:
-      description: A collection
-      type: object
-      properties:
-        object:
-          type: string
-          example: collection
-        url:
-          type: string
-        has_more:
-          type: boolean
-          example: true
   responses:
     NotFound:
       description: Not Found

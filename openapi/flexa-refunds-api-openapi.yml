@@ -73,35 +73,37 @@ paths:
       operationId: getRefundsById
       x-operation-id-source: derived
 components:
-  responses:
-    BadRequest:
-      description: Bad Request
-      headers:
-        Flexa-Version:
-          $ref: '#/components/headers/Flexa-Version'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/BadRequestError'
-    Forbidden:
-      description: Forbidden
-      headers:
-        Flexa-Version:
-          $ref: '#/components/headers/Flexa-Version'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ForbiddenError'
-    NotFound:
-      description: Not Found
-      headers:
-        Flexa-Version:
-          $ref: '#/components/headers/Flexa-Version'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/NotFoundError'
+  parameters:
+    FlexaVersion:
+      in: header
+      name: Flexa-Version
+      description: The API version to use for processing this request.
+      schema:
+        type: string
+        example: '2025-12-18'
   schemas:
+    ForbiddenError:
+      x-scalar-ignore: true
+      description: RFC 7807 (https://datatracker.ietf.org/doc/html/rfc7807)
+      type: object
+      properties:
+        type:
+          type: string
+          examples:
+          - https://example.com/errors/forbidden
+        title:
+          type: string
+          examples:
+          - Forbidden
+        status:
+          type: integer
+          format: int64
+          examples:
+          - 403
+        detail:
+          type: string
+          examples:
+          - You are not authorized to access this resource.
     Refund:
       type: object
       properties:
@@ -146,50 +148,6 @@ components:
           type: integer
           description: The time at which this refund was last updated, in non-leap seconds since the Unix epoch.
           example: 1520845080
-    ForbiddenError:
-      x-scalar-ignore: true
-      description: RFC 7807 (https://datatracker.ietf.org/doc/html/rfc7807)
-      type: object
-      properties:
-        type:
-          type: string
-          examples:
-          - https://example.com/errors/forbidden
-        title:
-          type: string
-          examples:
-          - Forbidden
-        status:
-          type: integer
-          format: int64
-          examples:
-          - 403
-        detail:
-          type: string
-          examples:
-          - You are not authorized to access this resource.
-    NotFoundError:
-      x-scalar-ignore: true
-      description: RFC 7807 (https://datatracker.ietf.org/doc/html/rfc7807)
-      type: object
-      properties:
-        type:
-          type: string
-          examples:
-          - https://example.com/errors/not-found
-        title:
-          type: string
-          examples:
-          - Not Found
-        status:
-          type: integer
-          format: int64
-          examples:
-          - 404
-        detail:
-          type: string
-          examples:
-          - The resource you are trying to access does not exist.
     BadRequestError:
       x-scalar-ignore: true
       description: RFC 7807 (https://datatracker.ietf.org/doc/html/rfc7807)
@@ -212,6 +170,28 @@ components:
           type: string
           examples:
           - The request was invalid.
+    NotFoundError:
+      x-scalar-ignore: true
+      description: RFC 7807 (https://datatracker.ietf.org/doc/html/rfc7807)
+      type: object
+      properties:
+        type:
+          type: string
+          examples:
+          - https://example.com/errors/not-found
+        title:
+          type: string
+          examples:
+          - Not Found
+        status:
+          type: integer
+          format: int64
+          examples:
+          - 404
+        detail:
+          type: string
+          examples:
+          - The resource you are trying to access does not exist.
     RefundCreateRequest:
       type: object
       required:
@@ -234,14 +214,34 @@ components:
           - return
           description: The reason for the return.
           example: return
-  parameters:
-    FlexaVersion:
-      in: header
-      name: Flexa-Version
-      description: The API version to use for processing this request.
-      schema:
-        type: string
-        example: '2025-12-18'
+  responses:
+    Forbidden:
+      description: Forbidden
+      headers:
+        Flexa-Version:
+          $ref: '#/components/headers/Flexa-Version'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ForbiddenError'
+    NotFound:
+      description: Not Found
+      headers:
+        Flexa-Version:
+          $ref: '#/components/headers/Flexa-Version'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NotFoundError'
+    BadRequest:
+      description: Bad Request
+      headers:
+        Flexa-Version:
+          $ref: '#/components/headers/Flexa-Version'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BadRequestError'
   headers:
     Flexa-Version:
       description: The API version used to process this request.
