@@ -142,6 +142,95 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
+    NotFoundError:
+      x-scalar-ignore: true
+      description: RFC 7807 (https://datatracker.ietf.org/doc/html/rfc7807)
+      type: object
+      properties:
+        type:
+          type: string
+          examples:
+          - https://example.com/errors/not-found
+        title:
+          type: string
+          examples:
+          - Not Found
+        status:
+          type: integer
+          format: int64
+          examples:
+          - 404
+        detail:
+          type: string
+          examples:
+          - The resource you are trying to access does not exist.
+    CommerceIntent:
+      type: object
+      properties:
+        id:
+          type: string
+          description: A unique identifier for the object.
+          example: ci_8wqPG5gM8vQxF4PCP8mp8
+        object:
+          type: string
+          example: commerce_intent
+        amount:
+          type: string
+          description: The amount intended to be collected from the customer, formatted according to the asset of the commerce intent.
+          example: '19.99'
+        amount_capturable:
+          type:
+          - string
+          - 'null'
+          description: The total amount that can be captured from the customer using this commerce intent.
+          example: null
+        amount_received:
+          type:
+          - string
+          - 'null'
+          description: The total amount that has been received from the customer using this commerce intent.
+          example: null
+        asset:
+          type: string
+          description: The unit of account for this commerce intent. Used to calculate the exchange rate for payments and refunds.
+          example: iso4217/USD
+        description:
+          type:
+          - string
+          - 'null'
+          description: An internal field for storing additional context about this commerce intent. Not shown to customers.
+          example: 'Invoice #BR1984'
+        display_id:
+          type: string
+          description: A unique, customer-facing identifier for this commerce intent, which can be useful for quickly tracking down the commerce intent that's associated with a specific payment or refund. Shown to customers in apps and receipts.
+          example: AB4JJP
+        link:
+          description: A link object that details the one-time–use payment link that can be shared with customers to pay this commerce intent.
+          $ref: '#/components/schemas/Link'
+        mid:
+          type: string
+          description: The MID used for processing this commerce intent.
+          example: '370748471846382'
+        status:
+          type: string
+          enum:
+          - pending
+          - succeeded
+          - canceled
+          description: The current status of this commerce intent with respect to the customer and their funds.
+          example: pending
+        test_mode:
+          type: boolean
+          description: Whether this commerce intent was created with a test API key and thus may be paid with valueless, test mode assets (true) or a live API key and therefore must be paid using live mode assets with real value (false).
+          example: false
+        created:
+          type: integer
+          description: The time at which this commerce intent was created, in non-leap seconds since the Unix epoch.
+          example: 1520845080
+        updated:
+          type: integer
+          description: The time at which this commerce intent was last updated, in non-leap seconds since the Unix epoch.
+          example: 1520845080
     Link:
       type: object
       properties:
@@ -220,95 +309,6 @@ components:
           type: integer
           description: The time at which this link was last updated, in non-leap seconds since the Unix epoch.
           example: 1520845080
-    ForbiddenError:
-      x-scalar-ignore: true
-      description: RFC 7807 (https://datatracker.ietf.org/doc/html/rfc7807)
-      type: object
-      properties:
-        type:
-          type: string
-          examples:
-          - https://example.com/errors/forbidden
-        title:
-          type: string
-          examples:
-          - Forbidden
-        status:
-          type: integer
-          format: int64
-          examples:
-          - 403
-        detail:
-          type: string
-          examples:
-          - You are not authorized to access this resource.
-    CommerceIntent:
-      type: object
-      properties:
-        id:
-          type: string
-          description: A unique identifier for the object.
-          example: ci_8wqPG5gM8vQxF4PCP8mp8
-        object:
-          type: string
-          example: commerce_intent
-        amount:
-          type: string
-          description: The amount intended to be collected from the customer, formatted according to the asset of the commerce intent.
-          example: '19.99'
-        amount_capturable:
-          type:
-          - string
-          - 'null'
-          description: The total amount that can be captured from the customer using this commerce intent.
-          example: null
-        amount_received:
-          type:
-          - string
-          - 'null'
-          description: The total amount that has been received from the customer using this commerce intent.
-          example: null
-        asset:
-          type: string
-          description: The unit of account for this commerce intent. Used to calculate the exchange rate for payments and refunds.
-          example: iso4217/USD
-        description:
-          type:
-          - string
-          - 'null'
-          description: An internal field for storing additional context about this commerce intent. Not shown to customers.
-          example: 'Invoice #BR1984'
-        display_id:
-          type: string
-          description: A unique, customer-facing identifier for this commerce intent, which can be useful for quickly tracking down the commerce intent that's associated with a specific payment or refund. Shown to customers in apps and receipts.
-          example: AB4JJP
-        link:
-          description: A link object that details the one-time–use payment link that can be shared with customers to pay this commerce intent.
-          $ref: '#/components/schemas/Link'
-        mid:
-          type: string
-          description: The MID used for processing this commerce intent.
-          example: '370748471846382'
-        status:
-          type: string
-          enum:
-          - pending
-          - succeeded
-          - canceled
-          description: The current status of this commerce intent with respect to the customer and their funds.
-          example: pending
-        test_mode:
-          type: boolean
-          description: Whether this commerce intent was created with a test API key and thus may be paid with valueless, test mode assets (true) or a live API key and therefore must be paid using live mode assets with real value (false).
-          example: false
-        created:
-          type: integer
-          description: The time at which this commerce intent was created, in non-leap seconds since the Unix epoch.
-          example: 1520845080
-        updated:
-          type: integer
-          description: The time at which this commerce intent was last updated, in non-leap seconds since the Unix epoch.
-          example: 1520845080
     BadRequestError:
       x-scalar-ignore: true
       description: RFC 7807 (https://datatracker.ietf.org/doc/html/rfc7807)
@@ -331,7 +331,7 @@ components:
           type: string
           examples:
           - The request was invalid.
-    NotFoundError:
+    ForbiddenError:
       x-scalar-ignore: true
       description: RFC 7807 (https://datatracker.ietf.org/doc/html/rfc7807)
       type: object
@@ -339,20 +339,20 @@ components:
         type:
           type: string
           examples:
-          - https://example.com/errors/not-found
+          - https://example.com/errors/forbidden
         title:
           type: string
           examples:
-          - Not Found
+          - Forbidden
         status:
           type: integer
           format: int64
           examples:
-          - 404
+          - 403
         detail:
           type: string
           examples:
-          - The resource you are trying to access does not exist.
+          - You are not authorized to access this resource.
     CommerceIntentCreateRequest:
       type: object
       required:
@@ -423,15 +423,6 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ForbiddenError'
-    NotFound:
-      description: Not Found
-      headers:
-        Flexa-Version:
-          $ref: '#/components/headers/Flexa-Version'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/NotFoundError'
     BadRequest:
       description: Bad Request
       headers:
@@ -441,6 +432,15 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/BadRequestError'
+    NotFound:
+      description: Not Found
+      headers:
+        Flexa-Version:
+          $ref: '#/components/headers/Flexa-Version'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NotFoundError'
   headers:
     Flexa-Version:
       description: The API version used to process this request.

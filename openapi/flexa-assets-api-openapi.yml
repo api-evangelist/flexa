@@ -74,27 +74,29 @@ paths:
       operationId: getAssetsById
       x-operation-id-source: derived
 components:
-  parameters:
-    FlexaVersion:
-      in: header
-      name: Flexa-Version
-      description: The API version to use for processing this request.
-      schema:
-        type: string
-        example: '2025-12-18'
   schemas:
-    Collection:
-      description: A collection
+    NotFoundError:
+      x-scalar-ignore: true
+      description: RFC 7807 (https://datatracker.ietf.org/doc/html/rfc7807)
       type: object
       properties:
-        object:
+        type:
           type: string
-          example: collection
-        url:
+          examples:
+          - https://example.com/errors/not-found
+        title:
           type: string
-        has_more:
-          type: boolean
-          example: true
+          examples:
+          - Not Found
+        status:
+          type: integer
+          format: int64
+          examples:
+          - 404
+        detail:
+          type: string
+          examples:
+          - The resource you are trying to access does not exist.
     Asset:
       type: object
       properties:
@@ -148,28 +150,18 @@ components:
           type: integer
           description: The time at which Flexa’s information about this asset was last updated, in non-leap seconds since the Unix epoch.
           example: 1520845080
-    NotFoundError:
-      x-scalar-ignore: true
-      description: RFC 7807 (https://datatracker.ietf.org/doc/html/rfc7807)
+    Collection:
+      description: A collection
       type: object
       properties:
-        type:
+        object:
           type: string
-          examples:
-          - https://example.com/errors/not-found
-        title:
+          example: collection
+        url:
           type: string
-          examples:
-          - Not Found
-        status:
-          type: integer
-          format: int64
-          examples:
-          - 404
-        detail:
-          type: string
-          examples:
-          - The resource you are trying to access does not exist.
+        has_more:
+          type: boolean
+          example: true
     Chain:
       type: object
       properties:
@@ -208,6 +200,20 @@ components:
           type: integer
           description: The time at which Flexa’s information about this chain was last updated, in non-leap seconds since the Unix epoch.
           example: 1520845080
+  parameters:
+    FlexaVersion:
+      in: header
+      name: Flexa-Version
+      description: The API version to use for processing this request.
+      schema:
+        type: string
+        example: '2025-12-18'
+  headers:
+    Flexa-Version:
+      description: The API version used to process this request.
+      schema:
+        type: string
+        example: '2025-12-18'
   responses:
     NotFound:
       description: Not Found
@@ -218,12 +224,6 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/NotFoundError'
-  headers:
-    Flexa-Version:
-      description: The API version used to process this request.
-      schema:
-        type: string
-        example: '2025-12-18'
   securitySchemes:
     BasicAuth:
       type: http
