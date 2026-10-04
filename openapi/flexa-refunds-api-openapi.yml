@@ -74,50 +74,28 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    NotFoundError:
-      x-scalar-ignore: true
-      description: RFC 7807 (https://datatracker.ietf.org/doc/html/rfc7807)
+    RefundCreateRequest:
       type: object
+      required:
+      - amount
+      - commerce_intent
       properties:
-        type:
+        amount:
           type: string
-          examples:
-          - https://example.com/errors/not-found
-        title:
+          description: The amount to refund to the customer.
+          example: '10.50'
+        commerce_intent:
           type: string
-          examples:
-          - Not Found
-        status:
-          type: integer
-          format: int64
-          examples:
-          - 404
-        detail:
+          description: The ID of the commerce intent to refund.
+          example: ci_cCHGVMpPXQ47wWpRG7X54
+        reason:
           type: string
-          examples:
-          - The resource you are trying to access does not exist.
-    BadRequestError:
-      x-scalar-ignore: true
-      description: RFC 7807 (https://datatracker.ietf.org/doc/html/rfc7807)
-      type: object
-      properties:
-        type:
-          type: string
-          examples:
-          - https://example.com/errors/bad-request
-        title:
-          type: string
-          examples:
-          - Bad Request
-        status:
-          type: integer
-          format: int64
-          examples:
-          - 400
-        detail:
-          type: string
-          examples:
-          - The request was invalid.
+          enum:
+          - customer_request
+          - duplicate
+          - return
+          description: The reason for the return.
+          example: return
     ForbiddenError:
       x-scalar-ignore: true
       description: RFC 7807 (https://datatracker.ietf.org/doc/html/rfc7807)
@@ -140,6 +118,50 @@ components:
           type: string
           examples:
           - You are not authorized to access this resource.
+    BadRequestError:
+      x-scalar-ignore: true
+      description: RFC 7807 (https://datatracker.ietf.org/doc/html/rfc7807)
+      type: object
+      properties:
+        type:
+          type: string
+          examples:
+          - https://example.com/errors/bad-request
+        title:
+          type: string
+          examples:
+          - Bad Request
+        status:
+          type: integer
+          format: int64
+          examples:
+          - 400
+        detail:
+          type: string
+          examples:
+          - The request was invalid.
+    NotFoundError:
+      x-scalar-ignore: true
+      description: RFC 7807 (https://datatracker.ietf.org/doc/html/rfc7807)
+      type: object
+      properties:
+        type:
+          type: string
+          examples:
+          - https://example.com/errors/not-found
+        title:
+          type: string
+          examples:
+          - Not Found
+        status:
+          type: integer
+          format: int64
+          examples:
+          - 404
+        detail:
+          type: string
+          examples:
+          - The resource you are trying to access does not exist.
     Refund:
       type: object
       properties:
@@ -184,55 +206,7 @@ components:
           type: integer
           description: The time at which this refund was last updated, in non-leap seconds since the Unix epoch.
           example: 1520845080
-    RefundCreateRequest:
-      type: object
-      required:
-      - amount
-      - commerce_intent
-      properties:
-        amount:
-          type: string
-          description: The amount to refund to the customer.
-          example: '10.50'
-        commerce_intent:
-          type: string
-          description: The ID of the commerce intent to refund.
-          example: ci_cCHGVMpPXQ47wWpRG7X54
-        reason:
-          type: string
-          enum:
-          - customer_request
-          - duplicate
-          - return
-          description: The reason for the return.
-          example: return
-  parameters:
-    FlexaVersion:
-      in: header
-      name: Flexa-Version
-      description: The API version to use for processing this request.
-      schema:
-        type: string
-        example: '2025-12-18'
   responses:
-    Forbidden:
-      description: Forbidden
-      headers:
-        Flexa-Version:
-          $ref: '#/components/headers/Flexa-Version'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ForbiddenError'
-    BadRequest:
-      description: Bad Request
-      headers:
-        Flexa-Version:
-          $ref: '#/components/headers/Flexa-Version'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/BadRequestError'
     NotFound:
       description: Not Found
       headers:
@@ -242,9 +216,35 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/NotFoundError'
+    BadRequest:
+      description: Bad Request
+      headers:
+        Flexa-Version:
+          $ref: '#/components/headers/Flexa-Version'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BadRequestError'
+    Forbidden:
+      description: Forbidden
+      headers:
+        Flexa-Version:
+          $ref: '#/components/headers/Flexa-Version'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ForbiddenError'
   headers:
     Flexa-Version:
       description: The API version used to process this request.
+      schema:
+        type: string
+        example: '2025-12-18'
+  parameters:
+    FlexaVersion:
+      in: header
+      name: Flexa-Version
+      description: The API version to use for processing this request.
       schema:
         type: string
         example: '2025-12-18'

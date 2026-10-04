@@ -120,14 +120,6 @@ paths:
       operationId: getEvents
       x-operation-id-source: derived
 components:
-  parameters:
-    FlexaVersion:
-      in: header
-      name: Flexa-Version
-      description: The API version to use for processing this request.
-      schema:
-        type: string
-        example: '2025-12-18'
   schemas:
     Event:
       type: object
@@ -161,6 +153,14 @@ components:
   headers:
     Flexa-Version:
       description: The API version used to process this request.
+      schema:
+        type: string
+        example: '2025-12-18'
+  parameters:
+    FlexaVersion:
+      in: header
+      name: Flexa-Version
+      description: The API version to use for processing this request.
       schema:
         type: string
         example: '2025-12-18'
