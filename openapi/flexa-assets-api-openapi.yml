@@ -74,6 +74,24 @@ paths:
       operationId: getAssetsById
       x-operation-id-source: derived
 components:
+  parameters:
+    FlexaVersion:
+      in: header
+      name: Flexa-Version
+      description: The API version to use for processing this request.
+      schema:
+        type: string
+        example: '2025-12-18'
+  responses:
+    NotFound:
+      description: Not Found
+      headers:
+        Flexa-Version:
+          $ref: '#/components/headers/Flexa-Version'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NotFoundError'
   schemas:
     Collection:
       description: A collection
@@ -140,6 +158,28 @@ components:
           type: integer
           description: The time at which Flexa’s information about this asset was last updated, in non-leap seconds since the Unix epoch.
           example: 1520845080
+    NotFoundError:
+      x-scalar-ignore: true
+      description: RFC 7807 (https://datatracker.ietf.org/doc/html/rfc7807)
+      type: object
+      properties:
+        type:
+          type: string
+          examples:
+          - https://example.com/errors/not-found
+        title:
+          type: string
+          examples:
+          - Not Found
+        status:
+          type: integer
+          format: int64
+          examples:
+          - 404
+        detail:
+          type: string
+          examples:
+          - The resource you are trying to access does not exist.
     Chain:
       type: object
       properties:
@@ -178,49 +218,9 @@ components:
           type: integer
           description: The time at which Flexa’s information about this chain was last updated, in non-leap seconds since the Unix epoch.
           example: 1520845080
-    NotFoundError:
-      x-scalar-ignore: true
-      description: RFC 7807 (https://datatracker.ietf.org/doc/html/rfc7807)
-      type: object
-      properties:
-        type:
-          type: string
-          examples:
-          - https://example.com/errors/not-found
-        title:
-          type: string
-          examples:
-          - Not Found
-        status:
-          type: integer
-          format: int64
-          examples:
-          - 404
-        detail:
-          type: string
-          examples:
-          - The resource you are trying to access does not exist.
-  responses:
-    NotFound:
-      description: Not Found
-      headers:
-        Flexa-Version:
-          $ref: '#/components/headers/Flexa-Version'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/NotFoundError'
   headers:
     Flexa-Version:
       description: The API version used to process this request.
-      schema:
-        type: string
-        example: '2025-12-18'
-  parameters:
-    FlexaVersion:
-      in: header
-      name: Flexa-Version
-      description: The API version to use for processing this request.
       schema:
         type: string
         example: '2025-12-18'

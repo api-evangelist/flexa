@@ -141,7 +141,111 @@ paths:
       operationId: postCommerceIntentsByIdCancel
       x-operation-id-source: derived
 components:
+  parameters:
+    FlexaVersion:
+      in: header
+      name: Flexa-Version
+      description: The API version to use for processing this request.
+      schema:
+        type: string
+        example: '2025-12-18'
   schemas:
+    BadRequestError:
+      x-scalar-ignore: true
+      description: RFC 7807 (https://datatracker.ietf.org/doc/html/rfc7807)
+      type: object
+      properties:
+        type:
+          type: string
+          examples:
+          - https://example.com/errors/bad-request
+        title:
+          type: string
+          examples:
+          - Bad Request
+        status:
+          type: integer
+          format: int64
+          examples:
+          - 400
+        detail:
+          type: string
+          examples:
+          - The request was invalid.
+    CommerceIntentCreateRequest:
+      type: object
+      required:
+      - amount
+      properties:
+        amount:
+          type: string
+          description: The amount to collect from the customer. The minimum amount that can be collected is the smallest decimal unit of the `asset` (e.g., $0.01 for `iso4217/USD`).
+          example: '19.99'
+        asset:
+          type: string
+          description: The unit of account to use for this commerce intent (i.e., the currency used to display the sale price to the customer). Used to calculate the exchange rate for payments and refunds. Defaults to the business's unit of account (or the MID's unit of account, if configured).
+        authorization:
+          type: object
+          description: Relevant data for authorizing this commerce intent in person when scanning barcode data from a customer-presented device. Should not be provided when creating an open-ended commerce intent that will be completed via a payment link.
+          properties:
+            number:
+              type: string
+              description: The numeric string collected from a customer-presented device (e.g., a smartphone) by a barcode scanner when accepting payments in person. Begins with `84` for customers using &ldquo;Pay with Flexa.&rdquo;
+              example: '8412345678901337'
+        capture_method:
+          type: string
+          enum:
+          - automatic
+          description: 'The method to use for capturing this payment from the customer: `automatic` (the commerce intent is immediately captured upon authorization). Defaults to `automatic`.'
+        description:
+          type: string
+          description: Optional internal field for storing additional context about this commerce intent. Not shown to customers.
+        link:
+          type: object
+          description: Optional parameters for customizing the behavior of this commerce intent's automatically generated payment link. Not applicable to commerce intents created using customer-presented `authorization` data.
+          properties:
+            after_completion:
+              type: object
+              description: Optional parameters for actions to be taken after the link’s commerce intent is successfully completed.
+              properties:
+                redirect_url:
+                  type: string
+                  description: The URL to which the customer will be redirected after a commerce intent is successfully completed. Useful for attributing a commerce intent to a specific cart or checkout flow.
+            restrictions:
+              type: object
+              description: A set of parameters that can be used to restrict the ways in which customers can interact with this commerce intent.
+              properties:
+                chains:
+                  type: array
+                  items:
+                    type: string
+                  description: The set of chains, specified as [CAIP-2](https://chainagnostic.org/CAIPs/caip-2) IDs, that the customer will be limited to using when interacting with this commerce intent. If empty, all chains will be made available.
+                  example: []
+        mid:
+          type: string
+          description: The MID to use for processing this commerce intent. Only required for teams with access to multiple MIDs.
+    NotFoundError:
+      x-scalar-ignore: true
+      description: RFC 7807 (https://datatracker.ietf.org/doc/html/rfc7807)
+      type: object
+      properties:
+        type:
+          type: string
+          examples:
+          - https://example.com/errors/not-found
+        title:
+          type: string
+          examples:
+          - Not Found
+        status:
+          type: integer
+          format: int64
+          examples:
+          - 404
+        detail:
+          type: string
+          examples:
+          - The resource you are trying to access does not exist.
     Link:
       type: object
       properties:
@@ -220,58 +324,6 @@ components:
           type: integer
           description: The time at which this link was last updated, in non-leap seconds since the Unix epoch.
           example: 1520845080
-    CommerceIntentCreateRequest:
-      type: object
-      required:
-      - amount
-      properties:
-        amount:
-          type: string
-          description: The amount to collect from the customer. The minimum amount that can be collected is the smallest decimal unit of the `asset` (e.g., $0.01 for `iso4217/USD`).
-          example: '19.99'
-        asset:
-          type: string
-          description: The unit of account to use for this commerce intent (i.e., the currency used to display the sale price to the customer). Used to calculate the exchange rate for payments and refunds. Defaults to the business's unit of account (or the MID's unit of account, if configured).
-        authorization:
-          type: object
-          description: Relevant data for authorizing this commerce intent in person when scanning barcode data from a customer-presented device. Should not be provided when creating an open-ended commerce intent that will be completed via a payment link.
-          properties:
-            number:
-              type: string
-              description: The numeric string collected from a customer-presented device (e.g., a smartphone) by a barcode scanner when accepting payments in person. Begins with `84` for customers using &ldquo;Pay with Flexa.&rdquo;
-              example: '8412345678901337'
-        capture_method:
-          type: string
-          enum:
-          - automatic
-          description: 'The method to use for capturing this payment from the customer: `automatic` (the commerce intent is immediately captured upon authorization). Defaults to `automatic`.'
-        description:
-          type: string
-          description: Optional internal field for storing additional context about this commerce intent. Not shown to customers.
-        link:
-          type: object
-          description: Optional parameters for customizing the behavior of this commerce intent's automatically generated payment link. Not applicable to commerce intents created using customer-presented `authorization` data.
-          properties:
-            after_completion:
-              type: object
-              description: Optional parameters for actions to be taken after the link’s commerce intent is successfully completed.
-              properties:
-                redirect_url:
-                  type: string
-                  description: The URL to which the customer will be redirected after a commerce intent is successfully completed. Useful for attributing a commerce intent to a specific cart or checkout flow.
-            restrictions:
-              type: object
-              description: A set of parameters that can be used to restrict the ways in which customers can interact with this commerce intent.
-              properties:
-                chains:
-                  type: array
-                  items:
-                    type: string
-                  description: The set of chains, specified as [CAIP-2](https://chainagnostic.org/CAIPs/caip-2) IDs, that the customer will be limited to using when interacting with this commerce intent. If empty, all chains will be made available.
-                  example: []
-        mid:
-          type: string
-          description: The MID to use for processing this commerce intent. Only required for teams with access to multiple MIDs.
     ForbiddenError:
       x-scalar-ignore: true
       description: RFC 7807 (https://datatracker.ietf.org/doc/html/rfc7807)
@@ -294,50 +346,6 @@ components:
           type: string
           examples:
           - You are not authorized to access this resource.
-    BadRequestError:
-      x-scalar-ignore: true
-      description: RFC 7807 (https://datatracker.ietf.org/doc/html/rfc7807)
-      type: object
-      properties:
-        type:
-          type: string
-          examples:
-          - https://example.com/errors/bad-request
-        title:
-          type: string
-          examples:
-          - Bad Request
-        status:
-          type: integer
-          format: int64
-          examples:
-          - 400
-        detail:
-          type: string
-          examples:
-          - The request was invalid.
-    NotFoundError:
-      x-scalar-ignore: true
-      description: RFC 7807 (https://datatracker.ietf.org/doc/html/rfc7807)
-      type: object
-      properties:
-        type:
-          type: string
-          examples:
-          - https://example.com/errors/not-found
-        title:
-          type: string
-          examples:
-          - Not Found
-        status:
-          type: integer
-          format: int64
-          examples:
-          - 404
-        detail:
-          type: string
-          examples:
-          - The resource you are trying to access does not exist.
     CommerceIntent:
       type: object
       properties:
@@ -415,15 +423,6 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/NotFoundError'
-    BadRequest:
-      description: Bad Request
-      headers:
-        Flexa-Version:
-          $ref: '#/components/headers/Flexa-Version'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/BadRequestError'
     Forbidden:
       description: Forbidden
       headers:
@@ -433,17 +432,18 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ForbiddenError'
+    BadRequest:
+      description: Bad Request
+      headers:
+        Flexa-Version:
+          $ref: '#/components/headers/Flexa-Version'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BadRequestError'
   headers:
     Flexa-Version:
       description: The API version used to process this request.
-      schema:
-        type: string
-        example: '2025-12-18'
-  parameters:
-    FlexaVersion:
-      in: header
-      name: Flexa-Version
-      description: The API version to use for processing this request.
       schema:
         type: string
         example: '2025-12-18'
